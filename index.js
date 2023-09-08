@@ -3,6 +3,14 @@ const express = require('express');
 const app  = express();
 const port = 8000;
 const expressLayouts = require('express-ejs-layouts');
+const db = require('./config/mongoose');
+
+// static file location or setup access
+app.use(express.static('./assets'));
+
+//extract style and scripts from sub pages(views eg userProfiles.ejs etc..)
+app.set('layout extractStyles', true);
+app.set('layout extractScripts', true);
 
 // before loading the views to the browser we have to set the wrappper for different content 
 //i.e for home.ejs or userProfile.ejs (variable part), we need to set the layouts(how page is structured)
