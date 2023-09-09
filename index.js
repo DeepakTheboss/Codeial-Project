@@ -1,9 +1,11 @@
 // setting up express server
 const express = require('express');
-const app  = express();
-const port = 8000;
 const expressLayouts = require('express-ejs-layouts');
 const db = require('./config/mongoose');
+const User = require('./models/user');
+const app  = express();
+const port = 8000;
+
 
 // static file location or setup access
 app.use(express.static('./assets'));
