@@ -3,8 +3,13 @@ const express = require('express');
 const expressLayouts = require('express-ejs-layouts');
 const db = require('./config/mongoose');
 const User = require('./models/user');
+const cookieParser = require('cookie-parser');
 const app  = express();
 const port = 8000;
+
+app.use(express.urlencoded()); // parssing the form data
+app.use(cookieParser()); // telling to app to use the cookie parser
+
 
 
 // static file location or setup access

@@ -20,5 +20,27 @@ module.exports.signIn = function(req,res){
     })
   }
 
+// actions name can be of any  but routes name should match with action in form tag
+
+
+//get the sign up data
+  module.exports.create = function(req, res){
+     return res.redirect('/users/sign-in');
+
+  }
+
+
+// sign in and create a seesion for the user
+  module.exports.createSession = function(req, res){
+    //
+  }
+
+
+
+  
+
+
+
+
 
 
