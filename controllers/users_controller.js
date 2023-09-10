@@ -23,19 +23,6 @@ module.exports.signIn = function(req,res){
 
 // actions name can be of any  but routes name should match with action in form tag
 
-
-//get the sign up data
-  module.exports.create = function(req, res){
-     return res.redirect('/users/sign-in');
-
-  }
-
-
-// sign in and create a seesion for the user
-  module.exports.createSession = function(req, res){
-    //
-  }
-
  /* get the sign up data or creating new user
  module.exports.create = function(req, res){
     if(req.body.password != req.body.confirm_password){
@@ -107,7 +94,7 @@ module.exports.create = async function(req, res) {
           }
           // user with the same email id already exists in database so simply redirect to the sign-up page 
           else {
-              console.log('User with this email id already exists', newUser.email);
+              console.log('User with this email id already exists', newUser.email); 
               return res.redirect('back');
           }
       } catch (err) {
@@ -115,4 +102,42 @@ module.exports.create = async function(req, res) {
           return res.redirect('/users/sign-up');
       }
   };
+
+
+  // sign in and create a seesion for the user
+  module.exports.createSession = async function(req, res){
+    try{
+         // finding the user by email
+    const user = await User.findOne({email : req.body.email});
+    // if user found then check whether the entered password(req.body.password) match with password in db or not.
+    //if it is match then will save the user id in cookie at server side and take to profile page otherwise send them to sign-in page
+    // if user not found then we can send them to sign in page.
+    if(user){
+      //if user found and password not match with db then redirect to sign in page
+      if(user.password != req.body.password){
+        console.log('Entered password is not matched with db');
+        return res.redirect('back');
+      }
+      //handle create session of user
+      // if we will user user._id then in cookie it will show in encoded 
+      //but in user.id it will in decoded(normal form)
+        res.cookie('user_id', user.id);
+        return res.redirect('/users/profile');
+    
+    }
+    // if user not found then we can send them to sign in page.
+    else {
+      console.log('user not found in db');
+      return res.redirect('back');
+    }
+   
+    }
+    catch(err){
+      console.log('error while signing in', err);
+      return res.redirect('back'); //back to sign in page
+    }
+    
+  }
+
+  
   
