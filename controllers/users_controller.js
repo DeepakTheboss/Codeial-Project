@@ -1,10 +1,39 @@
 const User = require('../models/user')
-module.exports.profile = function(req,res){
-    return  res.render('userProfile', {
-        title: "User Profile"
-    })
+module.exports.profile = async function(req,res){
+  
+    try{
+       // checking whether user-id present in cookies or not
+    if(req.cookies.user_id)
+    {
+      const user = await User.findById(req.cookies.user_id);
+      // if user is found with same user_id 
+      if(user){
+        return res.render('userProfile', {
+          title:"User Profile",
+          user: user
+        })
+      }
+      // if someone changed the user_id in cookies , it means previus user_id is deleted
+      //in that case user will be not found, so for that we have to take the user back 
+      //to sign in page means user is unauthorized.
+      // or invalid user_id for that user who just signed in.
+      return res.redirect('/users/sign-in');
+
+    }
+    else{
+    // if user_id is not there in cookies then rediect to sign page, again not authorized user
+      return res.redirect('/users/sign-in');
+    }
+    }
+    catch(err){
+       console.log("error while fetching the profile page", err);
+       return res.redirect('/users/sign-in');
+    }
 
 }
+
+
+
 // these are actions not the routes which u type in browser
 //render the sign up page
 module.exports.signUp = function(req,res){
