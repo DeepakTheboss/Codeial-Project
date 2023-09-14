@@ -90,3 +90,21 @@ passport.deserializeUser(async function(id,done){
     }
 });
 
+// check if the user is authenticated or not( sign-in or not)
+// here we are creating a middleware why bcs to access any page url the user should be authenticated
+// so middleware exist before any controller so writting code in middleware to check user is authenticated or not
+passport.checkAuthentication = function(req,res,next){
+    if(req.isAuthenticated()){
+        return next();
+    }
+    return res.redirect('/users/sign-in');
+}
+
+passport.setAuthenticatedUser = function(req, res, next){
+  if(req.isAuthenticated()){
+    res.locals.user = req.user;
+    
+  }
+  next();
+}
+
