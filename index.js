@@ -36,7 +36,7 @@ app.set('views', './views');
 
 // after setting the views right this code
 app.use(session({
-    name: 'Codial',   // name of the cookie
+    name: 'Codeial',   // name of the cookie
     // to do change the secret before at deployment
     secret: 'blahsome',   // using this secrect key we will encrypt user.id which we set in the cookie
     saveUnInitialized: false,  // if user is not loged-in it means session is not initialized

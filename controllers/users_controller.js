@@ -1,13 +1,24 @@
 const User = require('../models/user')
 module.exports.profile = function(req,res){
     return  res.render('userProfile', {
-        title: "User Profile"
+        title: "User Profile",
+        user : req.user 
     })
 
 }
 // these are actions not the routes which u type in browser
+ /* 
+    restriction after sign-up and sign-in 
+    if user sign-in already with step sign-up and sign-in and then if user put url of sign-in the 
+   take that user to the profile page not to sign-up and sign-in
+ */
 //render the sign up page
 module.exports.signUp = function(req,res){
+
+ 
+  if(req.isAuthenticated()){
+      return res.reedirect('./users/profile')
+  }
   return res.render('user_sign_up', {
     title: "Codeial | Sign Up"
   })
@@ -16,6 +27,10 @@ module.exports.signUp = function(req,res){
 
 //render the sign in page
 module.exports.signIn = function(req,res){
+
+    if(req.isAuthenticated()){
+      return res.reedirect('./users/profile')
+    }
     return res.render('user_sign_in', {
       title: "Codeial | Sign In"
     })
