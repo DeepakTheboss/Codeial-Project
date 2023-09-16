@@ -1,65 +1,82 @@
-// setting up express server
 const express = require('express');
 const expressLayouts = require('express-ejs-layouts');
 const db = require('./config/mongoose');
 const User = require('./models/user');
 const cookieParser = require('cookie-parser');
-const app  = express();
+const app = express();
 const port = 8000;
-// used for session-cookie for saving the user_id (or any key) in encrypted form
+
+// Used for session-cookie to save the user_id (or any key) in encrypted form
 const session = require('express-session');
 const passport = require('passport');
 const passportLocal = require('./config/passport-local-strategy');
 
+// Saving session info to the db
+const MongoStore = require('connect-mongo');
 
-app.use(express.urlencoded()); // parssing the form data
-app.use(cookieParser()); // telling to app to use the cookie parser
+// Middleware for parsing form data
+app.use(express.urlencoded({ extended: true }));
 
+// Middleware for parsing cookies
+app.use(cookieParser());
 
-
-// static file location or setup access
+// Middleware for serving static files
 app.use(express.static('./assets'));
 
-//extract style and scripts from sub pages(views eg userProfiles.ejs etc..)
+// Extract style and scripts from sub pages (views e.g., userProfiles.ejs, etc.)
 app.set('layout extractStyles', true);
 app.set('layout extractScripts', true);
 
-// before loading the views to the browser we have to set the wrappper for different content 
-//i.e for home.ejs or userProfile.ejs (variable part), we need to set the layouts(how page is structured)
+// Before loading the views to the browser, we have to set the wrapper for different content
+// i.e., for home.ejs or userProfile.ejs (variable part), we need to set the layouts (how the page is structured)
 app.use(expressLayouts);
 
-
-//setting the view engine to show everything on UI
-
+// Setting the view engine to show everything on UI
 app.set('view engine', 'ejs');
 app.set('views', './views');
 
-// after setting the views right this code
-app.use(session({
-    name: 'Codeial',   // name of the cookie
-    // to do change the secret before at deployment
-    secret: 'blahsome',   // using this secrect key we will encrypt user.id which we set in the cookie
-    saveUnInitialized: false,  // if user is not loged-in it means session is not initialized
-    resave: false,  // if user is loged-in then data will be in session-cookie then no need to save data again and again
+// Session configuration
+app.use(
+  session({
+    name: 'Codeial', // Name of the cookie
+    secret: 'your-secret-key', // Use a strong and unique secret key
+    saveUninitialized: false,
+    resave: false,
     cookie: {
-        maxAge: (1000 * 60 *100)   // expiration time in milisecond
-    }
+      maxAge: 1000 * 60 * 100, // Expiration time in milliseconds
+    },
+    // Mongo store is used to store the cookie in the database
+    
+    store: new MongoStore(
+      {
+       // mongooseConnection: db,
+        // in newer versions where db is 'monggose.connection'
+        mongoUrl: 'mongodb://127.0.0.1/db',
+        autoRemove: 'disabled',
+      },
+      function (err) {
+        if (err) {
+          console.error('Error setting up session store:', err);
+        } else {
+          console.log('connect-mongodb setup ok');
+        }
+      }
+    ),
+  })
+);
 
-}));
-
-//telling exp app to use the passport.js 
+// Passport initialization
 app.use(passport.initialize());
-app.use(passport.session());    // passport also helps in maintaing the session(encryption and decryption)
+app.use(passport.session());
 
-//use express  router
-app.use('/', require('./routes')); // it will pick default index.js route(inside the routes folder i.e index.js)
+// Use express router
+app.use('/', require('./routes')); // It will pick the default index.js route (inside the routes folder i.e., index.js)
 
-
-app.listen(port, function(err){
-    if(err){
-        console.log(`Error in running the server ${err}`);
-        return;
-
-    }
-    console.log(`Yup ! My Express server is up and running on port ${port}`);
-})
+// Server listening
+app.listen(port, function (err) {
+  if (err) {
+    console.log(`Error in running the server ${err}`);
+    return;
+  }
+  console.log(`Yup! My Express server is up and running on port ${port}`);
+});
