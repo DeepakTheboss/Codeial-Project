@@ -128,3 +128,15 @@ module.exports.create = async function(req, res) {
       return res.redirect('/');
     //
   }
+
+  // sign out
+  module.exports.destroySession = function(req, res){
+          // before terminating the session we have to logout
+          // logout() fn provided by passport.js to req
+          req.logout(function(err){
+            if(err){
+              console.log("Error while logout", err);
+            }
+          }); 
+          return res.redirect('/'); ///to home page
+  }

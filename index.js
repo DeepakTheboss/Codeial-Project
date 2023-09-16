@@ -69,8 +69,12 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
+
+app.use(passport.setAuthenticatedUser);
+
 // Use express router
-app.use('/', require('./routes')); // It will pick the default index.js route (inside the routes folder i.e., index.js)
+app.use('/', require('./routes')); // It will pick the default 
+//index.js route (inside the routes folder i.e., index.js)
 
 // Server listening
 app.listen(port, function (err) {
