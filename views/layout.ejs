@@ -3,14 +3,32 @@
       <title>
        <%= title %>
       </title>
-      <link rel="stylesheet" href="../css/layout.css">
+      <!-- conversion of .scss to .css files will same as we have written 
+        in here like layout.css, header.css
+      footer.css-->
+
+      <link rel="stylesheet" href="/css/layout.css">
+
+      <!-- including styles of header and footer which is comes from heaader.scss and footer.scss
+      and intenrnally complied by sassMiddleware then paste into /assets/css folder-->
+      <!-- here we are providing .css files bcs browser does not understand .scss or sass files-->
+
+      <link rel="stylesheet" href="/css/header.css">
+      <link rel="stylesheet" href="/css/footer.css">
       <%- style %>
     </head>
     <body>
         <%- include('_header'); %>
         <!-- this is the content part that will render at runtime i.e userProfile.ejs or home.js-->
         <!-- provided by layout library-->
-        <%- body %>
+
+        
+        <!-- we are demonstrating how .scss contents will comipled and set into the .css files
+        by saasMiddlewwaare library(node-saas-middleware)-->
+        <main id = "layout-main">
+          <%- body %>
+        </main>
+        
         <%- include('_footer'); %>
 
         <%- script %>

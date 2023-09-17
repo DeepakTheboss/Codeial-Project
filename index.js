@@ -13,6 +13,19 @@ const passportLocal = require('./config/passport-local-strategy');
 
 // Saving session info to the db
 const MongoStore = require('connect-mongo');
+// used for compiling the scss or sass files into css
+const sassMiddleware = require('node-sass-middleware');
+
+// puted  this middleware to at the starting, before server gets started bcs it will precompiled 
+//and availble to all the views
+app.use(sassMiddleware({
+  src: './assets/scss',
+  dest: './assets/css',
+  debug: true,
+  outputStyle: 'extended',
+  prefix: '/css'
+
+}));
 
 // Middleware for parsing form data
 app.use(express.urlencoded({ extended: true }));
@@ -43,15 +56,15 @@ app.use(
     saveUninitialized: false,
     resave: false,
     cookie: {
-      maxAge: 1000 * 60 * 100, // Expiration time in milliseconds
+      maxAge: 1000 * 60 * 5, // Expiration time in milliseconds (5 mins)
     },
     // Mongo store is used to store the cookie in the database
     
     store: new MongoStore(
       {
        // mongooseConnection: db,
-        // in newer versions where db is 'monggose.connection'
-        mongoUrl: 'mongodb://127.0.0.1/db',
+        // this is newer versions 
+        mongoUrl: 'mongodb://127.0.0.1/codeial_development',
         autoRemove: 'disabled',
       },
       function (err) {
