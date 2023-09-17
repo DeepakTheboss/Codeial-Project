@@ -13,5 +13,8 @@ router.get('/', homeController.home);
 //so here till localhost:8000/users   we are accessing.
 router.use('/users', require('./users')); //sub-routes
 
+// sub routes for the posts
+router.use('/posts', require('./posts'));
+
 module.exports = router;
 
