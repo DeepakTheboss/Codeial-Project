@@ -17,7 +17,7 @@ module.exports.create = async function(req, res){
     }
     // if post is null then here we have handled or any error related to post
     catch(err) {
-        console.log("error while creating a post", err); 
+        console.log("error while making a post", err); 
         return;
     }
 }
