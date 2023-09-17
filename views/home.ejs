@@ -3,10 +3,14 @@
 <!-- Posts need to render on home page so will make a form which user will share or post-->
 <section id = "feed-posts">
 <h4>Posts</h4>
+<!-- if user is not signedIn then don't show the post form or signed In user can see the post form-->
+<% if(locals.user) { %>
 <form action="/posts/create" id = "new-post-form" method="POST">
     <textarea name="content" cols="30" rows="5" placeholder="Type here..."></textarea>
     <input type="submit" value ="Post">
 </form>
+<% } %>
+
 
 <div id = "posts-list-container">
  <ul>
