@@ -23,6 +23,7 @@
                     <%= post.user.name %>
                 </small>
             </p>
+            <!-- showing commment form-->
             <div class="post-comments">
                 <% if(locals.user){%> 
                     <form action="/comments/create" method="POST">
@@ -32,6 +33,22 @@
                     </form>
                     <%} %>
             </div>
+            <!-- dsiplaying comments and author of comments-->
+            <!-- for viewing the comments signedIn not required-->
+            <div id = "post-comments-list">
+                <ul id="post-comments-<%= post._id%>">
+                    <% for(comment of post.comments) {%>
+                        <p>
+                            <%= comment.content %>
+                            <br>
+                            <small>
+                                <%= comment.user.name %>
+                            </small>
+                        </p>
+                    <% } %>    
+                </ul>
+            </div>
+
         </li>
     <% } %>       
  </ul>
