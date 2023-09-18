@@ -12,7 +12,14 @@ const postSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,  // objectid of user that it will pick from db
         ref:'User' // schema or model  name in db of User
 
-    }
+    },
+    comments : [
+        {
+            type: mongoose.Schema.Types.ObjectId, // storing all comments id
+            ref:'Comment'
+        }
+    ]
+    
 
 }, {
     timestamps: true
