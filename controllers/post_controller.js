@@ -31,26 +31,21 @@ module.exports.destroy = async function(req, res){
   
   try{
     //berore deleing a post we need to check whether particular post is exist or not from db
-    console.log("param id:", req.params.id);
     const post = await Post.findById(req.params.id); // getting id of post through string param
     // if post found then
+    console.log("Post object: ", post);
     // apart from signed In user no one else is allowed to delete a post(Authorization)
-    //means if  post user and current user is same  then he/she can delete post
-
-    console.log("Post", post);
+    //means if  post done by user and current signed In user is same  then he/she can delete post
 
     // post.user is user's id
     //.id means converting the object id to string
-    console.log(post.user  == req.user.id);
-    console.log(req.user.id);
-
     if(post.user == req.user.id){
        await post.deleteOne(); // post.remove() is not working in newer version
        // and then delete all the comments associated with that post
        const deletedComments = await Comment.deleteMany({post: req.params.id});
        if(deletedComments) {
         console.log("Comments deleted successfully");
-        return res.redirect('back') //back to post page
+        return res.redirect('back') //back to home page
        }
        else{
         console.log("error while deleting these comments");
@@ -64,6 +59,6 @@ module.exports.destroy = async function(req, res){
   }
   catch(err){
     console.log("Error in deleting the post", post);
-    return res.redirect('back'); //back to post page
+    return res.redirect('back'); //back to home page
   }
 }

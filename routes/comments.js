@@ -9,5 +9,10 @@ const commentsController = require('../controllers/comments_controller');
 //can create or make a post
 router.post('/create',passport.checkAuthentication, commentsController.create);
 
+// deleting a comment from the post
+router.get('/destroy/:id',passport.checkAuthentication, commentsController.destroy);
+
+
+
 module.exports = router;
 

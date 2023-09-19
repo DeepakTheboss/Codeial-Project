@@ -18,13 +18,12 @@
         <li>
             <p>
                 <!-- deleting post in UI url-->
-                <!-- locals.user is signedIn user & id of user who currently signedIn == id of user who made a post-->
+                <!-- locals.user is signedIn user & id of user who currently  signedIn == id of user who made a post-->
+                <!-- post.user is user's id only but in ObjectId('98765432') form 
+                and post.user.id is '98765987' string format-->
                 <% if(locals.user && locals.user.id == post.user.id) { %>
                     <small>
                        <a href="/posts/destroy/<%= post.id %>">Delete Post(X)</a>
-                       <!--Add a data attribute for post ID and prevent default click behavior
-                          <a href="#" data-post-id="<%= post.id %>" class="delete-post-link">Delete Post(X)</a>--> 
-
                     </small>
                  <% } %>   
 
@@ -50,6 +49,12 @@
                 <ul id="post-comments-<%= post._id%>">
                     <% for(comment of post.comments) {%>
                         <p>
+               <!--check required that only signedIn user can delete comments of any user on his post-->
+                
+                    <small>
+                       <a href="/comments/destroy/<%= comment.id %>">Delete Comment(X)</a>
+                    </small>
+               
                             <%= comment.content %>
                             <br>
                             <small>
