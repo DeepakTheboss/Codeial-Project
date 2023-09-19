@@ -17,6 +17,17 @@
     <% for(post of posts) { %> 
         <li>
             <p>
+                <!-- deleting post in UI url-->
+                <!-- locals.user is signedIn user & id of user who currently signedIn == id of user who made a post-->
+                <% if(locals.user && locals.user.id == post.user.id) { %>
+                    <small>
+                       <a href="/posts/destroy/<%= post.id %>">Delete Post(X)</a>
+                       <!--Add a data attribute for post ID and prevent default click behavior
+                          <a href="#" data-post-id="<%= post.id %>" class="delete-post-link">Delete Post(X)</a>--> 
+
+                    </small>
+                 <% } %>   
+
                 <%= post.content %>
                 <br>
                 <small>

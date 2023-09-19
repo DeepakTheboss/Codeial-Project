@@ -9,5 +9,9 @@ const postsController = require('../controllers/post_controller');
 //can create or make a post
 router.post('/create',passport.checkAuthentication, postsController.create);
 
+// deleting post url
+router.get('/destroy/:id',passport.checkAuthentication, postsController.destroy);
+
+
 module.exports = router;
 
