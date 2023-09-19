@@ -1,5 +1,6 @@
 // Posts need to be rendered on home page
 const Post = require('../models/post');
+const User = require('../models/user');
 
 
 
@@ -36,13 +37,19 @@ module.exports.home = async function(req, res){
         populate: {
             path: 'user'
         }
-     })
-     .exec();
+     }).exec();
+
+
+     // finding all the user for listing all users on home page
+     // and will make a link on each user and after clicking that it will
+     // so respective profile page of user
+     const users = await  User.find({});
      // if all posts is fetched from db
      if(posts){
         return  res.render('home', {
             title: "Codeial | Home Page",
-            posts : posts
+            posts : posts,
+            all_users : users
         })
      }
     }

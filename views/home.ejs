@@ -21,4 +21,18 @@
 
 </div>
 </section>
+
+<section id = "user-friends">
+   <h4>Friends List</h4>
+   <!-- listing all users  only when current user is logged in-->
+   <% if(locals.user) { %> 
+   <% for(u of all_users) {  %>
+      <p>
+         <a href="/users/profile/<%= u.id %>"><%= u.name %></a>
+      </p>
+   <% } %>
+   <% } %>
+
+</section>
+
      

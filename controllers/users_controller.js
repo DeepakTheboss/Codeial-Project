@@ -1,8 +1,21 @@
-const User = require('../models/user')
-module.exports.profile = function(req,res){
+const User = require('../models/user');
+
+
+module.exports.profile = async function(req,res){
+  try{
+  // receving id of user which sent from home.ejs through the string param from users routes
+   const user = await User.findById(req.params.id);
+   // if user found then
+   if(user){
     return  res.render('userProfile', {
-        title: "User Profile" 
-    })
+        title: "User Profile",
+        profile_user: user 
+    });
+  }
+  }
+  catch(err){
+    console.log("Error in finding the user");
+  }
 
 }
 // these are actions not the routes which u type in browser
