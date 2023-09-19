@@ -73,7 +73,7 @@ module.exports.destroy = async function (req, res) {
       
       // pulling an individual comment from commnets array which is present in post model
       const post = await Post.findByIdAndUpdate(postId,{ $pull: { comments: req.params.id } },{ new: true }).exec();
-      
+       
       console.log("After deleting a comment from post ", post.comments);
       // post updated
       if (post) {
