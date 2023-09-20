@@ -4,6 +4,7 @@ const passport = require('passport');
 const usersController = require('../controllers/users_controller');
 // before going to profile url acsess the you have to logged-in  firs the sign-in
 router.get('/profile/:id', passport.checkAuthentication, usersController.profile);
+router.post('/update/:id', passport.checkAuthentication, usersController.update);
 
 /// route for sign up which u type in browser
 router.get('/sign-up', usersController.signUp);

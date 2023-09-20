@@ -1,3 +1,4 @@
+const { response } = require('express');
 const User = require('../models/user');
 
 
@@ -17,6 +18,37 @@ module.exports.profile = async function(req,res){
     console.log("Error in finding the user");
   }
 
+}
+
+module.exports.update = async function(req, res){
+  try{
+     // SignedIn user can update only his/her profile 
+      if(req.user.id == req.params.id){
+        console.log( "this is body:", req.body);
+        const user = await User.findByIdAndUpdate(req.params.id,
+          {
+            name: req.body.name,
+            email: req.body.email
+          }, 
+          { new: true });
+        console.log("Profie updated successfully !!", user);
+        console.log( "this is body:", req.body);
+        return res.redirect('back');
+
+      }
+      //Signed In user updating another user profile by inspecting the update html form 
+      // then he will take id of any user and replace with id of user that is coming from 
+      //String params to someone else id
+      //eg. /users/profile/122  (122 id of user coming from update profile form i.e string params) 
+      //after changing /users/profile/344 (344 id of user which exits in db)
+      //for preventing this we have written if condition
+      else {
+           return res.status(401).send('Unauthorized');
+      }
+  }catch(err){
+      console.log("error while updating profile", err);
+      return res.redirect('back') //back to home page or from where I was coming from
+  }
 }
 // these are actions not the routes which u type in browser
  /* 

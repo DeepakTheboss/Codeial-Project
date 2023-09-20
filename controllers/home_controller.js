@@ -41,8 +41,8 @@ module.exports.home = async function(req, res){
 
 
      // finding all the user for listing all users on home page
-     // and will make a link on each user and after clicking that it will
-     // so respective profile page of user
+     // and will make a link on each user name and after clicking that it will
+     // go to respective profile page of user
      const users = await  User.find({});
      // if all posts is fetched from db
      if(posts){

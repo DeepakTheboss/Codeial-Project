@@ -6,7 +6,11 @@
         <!-- if user is logged in then-->
         <% if(locals.user) { %>
             <li>
-                <a href="/users/profile"> <%= user.name %></a>
+                <!-- handled the error while clicking on user name on top right  navbar or heading section
+                and anchor tag is GET reqqest only -->
+                <a href="/users/profile/<%= user.id%>"> 
+                    <%= user.name %>
+                </a>
                
             </li>
             <br>
