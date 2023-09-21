@@ -6,7 +6,8 @@
       <!-- conversion of .scss to .css files will same as we have written 
         in here like layout.css, header.css
       footer.css-->
-
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.min.css">
+      <script src = "https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.min.js"></script>
       <link rel="stylesheet" href="/css/layout.css">
 
       <!-- including styles of header and footer which is comes from heaader.scss and footer.scss
@@ -25,9 +26,9 @@
 
         <!-- accessing flash messags in our templates 
         choosing layout.ejs bcs this is common layout for whole application-->
-        <% if(flash.success && flash.success.length>0) {%>
+        <!-- <% if(flash.success && flash.success.length>0) {%>
           <h5><%= flash.success %> </h5>
-        <% }%>  
+        <% }%>   -->
 
         
         <!-- we are demonstrating how .scss contents will comipled and set into the .css files
@@ -39,5 +40,27 @@
         <%- include('_footer'); %>
 
         <%- script %>
+
+        <script>
+           <% if(flash.success && flash.success.length>0) { %>
+              new Noty({
+              theme: 'relax',
+              text: '<%=flash.success %>',
+              type: 'success',
+              layout:'topRight',
+              timeout:1500
+              }).show();
+           <% }%> 
+           //--for error notifications
+           <% if(flash.error && flash.error.length>0) { %>
+            new Noty({
+              theme: 'relax',
+              text: "<%= flash.error %>",
+              type: 'error',
+              layout:'topRight',
+              timeout:1500
+              }).show();
+          <% } %>
+        </script>
     </body>
 </html>
