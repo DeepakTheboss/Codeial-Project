@@ -15,6 +15,9 @@ const passportLocal = require('./config/passport-local-strategy');
 const MongoStore = require('connect-mongo');
 // used for compiling the scss or sass files into css
 const sassMiddleware = require('node-sass-middleware');
+// used bcs showing flash messages to UI
+const flash = require('connect-flash');
+const cusMware = require('./config/middleware');
 
 // puted  this middleware to at the starting, before server gets started bcs it will precompiled 
 //and availble to all the views
@@ -81,6 +84,12 @@ app.use(
 // Passport initialization
 app.use(passport.initialize());
 app.use(passport.session());
+
+// flash messages are stored in session-cookie hence 
+//1st seesion needs be initialized the we can able to use flash
+app.use(flash());
+//use it after flash
+app.use(cusMware.setFlash);
 
 
 app.use(passport.setAuthenticatedUser);

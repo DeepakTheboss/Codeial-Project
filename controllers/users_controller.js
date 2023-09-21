@@ -169,6 +169,8 @@ module.exports.create = async function(req, res) {
 
   // sign in and create a seesion for the user
   module.exports.createSession = function(req, res){
+    //setting a flsh object into req
+      req.flash('success', "Logged in succcessfully!");
       return res.redirect('/');
     //
   }
@@ -181,6 +183,7 @@ module.exports.create = async function(req, res) {
             if(err){
               console.log("Error while logout", err);
             }
-          }); 
+          });
+          req.flash('success', "You have logged out!"); 
           return res.redirect('/'); ///to home page
   }
