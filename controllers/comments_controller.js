@@ -15,7 +15,8 @@ module.exports.create = async function (req, res) {
       });
       // if comment created successfully then we need to add comment to the post
       if (comment) {
-        console.log("Comment added successfully to post", comment);
+        req.flash('success', "Comment added successfully to post");
+        //console.log("Comment added successfully to post", comment);
         await comment.save();
         // here on each post we are adding array of comments as Post Schema says ()
 
@@ -24,14 +25,18 @@ module.exports.create = async function (req, res) {
         post.comments.push(comment);
         await post.save();
 
-        return res.redirect("/"); // back to home page
+        return res.redirect("back"); // back to home page or '/'
       } else {
-        console.log("Error while making a comment on post");
+        req.flash('error', "Error while making a comment on post");
+        //console.log("Error while making a comment on post");
+        return res.redirect("back");
       }
     }
   } catch (err) {
-    console.error(err);
-    return res.status(500).send("Internal Server Error");
+    req.flash('error', err);
+    return res.redirect("back");
+    //console.error(err);
+    //return res.status(500).send("Internal Server Error");
   }
 };
 
@@ -77,17 +82,22 @@ module.exports.destroy = async function (req, res) {
       console.log("After deleting a comment from post ", post.comments);
       // post updated
       if (post) {
+        req.flash('success', "Post object upated successfully by removing an comment");
         console.log("Post object upated successfully by removing an comment");
         return res.redirect('back'); //back to home page
       } else {
+        req.flash('error', "error while deleting a comment from a post");
         console.log("error while deleting a comment from a post");
+        return res.redirect('back');
       }
     } else {
+      req.flash('error', "Unauthorized to delete this comment");
       console.log("Unauthorized to delete this comment");
-      return res.status(401).send("Unauthorized");
+      //return res.status(401).send("Unauthorized");
+      return res.redirect('back');
     }
   } catch (err) {
-    // end of try
+    req.flash('error', "Error in deleting the comment");
     console.log("Error in deleting the comment", comment);
     return res.redirect('back'); //back to home page
   }

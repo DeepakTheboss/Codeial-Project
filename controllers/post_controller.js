@@ -12,14 +12,16 @@ module.exports.create = async function(req, res){
         user : req.user._id });   // if user is not signed in then will not get _id
       // if post object is there then
       if(post){
-        console.log("Post is created successfully!!", post);
+        req.flash('success', "Post is created successfully!!");
+        //console.log("Post is created successfully!!", post);
         return res.redirect('back'); //or '/',  back to the home page
       } 
     }
     // if post is null then here we have handled or any error related to post
     catch(err) {
-        console.log("error while making a post", err); 
-        return;
+        req.flash('error', "Error while making a post");
+        //console.log("error while making a post", err); 
+        return res.redirect('back');
     }
 }
 
@@ -44,21 +46,26 @@ module.exports.destroy = async function(req, res){
        // and then delete all the comments associated with that post
        const deletedComments = await Comment.deleteMany({post: req.params.id});
        if(deletedComments) {
-        console.log("Comments deleted successfully");
+        req.flash('success', "Post and associated comments deleted successfully");
+        //console.log("Comments deleted successfully");
         return res.redirect('back') //back to home page
        }
        else{
-        console.log("error while deleting these comments");
+        req.flash('error', "Error while deleting these comments from post");
+        //console.log("error while deleting these comments");
        }
        
     }
     else {
-      console.log("Unauthorized to delete this post");
-      return res.status(401).send("Unauthorized");
+      req.flash('error', "Unauthorized to delete this post");
+      //console.log("Unauthorized to delete this post");
+      //return res.status(401).send("Unauthorized");
+      return res.redirect('back'); //back to home page
   }
   }
   catch(err){
-    console.log("Error in deleting the post", post);
+    req.flash('error', "Error in deleting the post");
+    //console.log("Error in deleting the post", post);
     return res.redirect('back'); //back to home page
   }
 }

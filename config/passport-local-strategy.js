@@ -36,19 +36,28 @@ passport.use(new LocalStrategy({
 passport.use(new LocalStrategy(
     {
       usernameField: 'email',
+      passReqToCallback: true // then "req" will be 1st argument in async function
     },
-    async (email, password, done) => {
+    async (req,email, password, done) => {
       try {
         const user = await User.findOne({ email });
-
+        
+        if(user){
         if (user.password !== password) {
-          console.log('Invalid Username/Password');
+          req.flash('error', 'Invalid Username/Password');
           return done(null, false); // Signifies that user is not authenticated with no errors
         }
 
         return done(null, user); // Signifies that user is authenticated with no errors
+      }
+      // handled if email is not present in db then user will be null
+      else {
+        req.flash('error', 'User not found');
+        return done(null,false);
+      }
       } catch (err) {
-        console.error('Error in finding the user:', err);
+        req.flash('error', err);
+        //console.error('Error in finding the user:', err);
         return done(err); // Propagating error to Passport
       }
     }

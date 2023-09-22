@@ -24,13 +24,14 @@ module.exports.update = async function(req, res){
   try{
      // SignedIn user can update only his/her profile 
       if(req.user.id == req.params.id){
-        console.log( "this is body:", req.body);
+       // console.log( "this is body:", req.body);
         const user = await User.findByIdAndUpdate(req.params.id,
           {
             name: req.body.name,
             email: req.body.email
           }, 
           { new: true });
+        req.flash('success', "Profie updated successfully !!");  
         console.log("Profie updated successfully !!", user);
         console.log( "this is body:", req.body);
         return res.redirect('back');
@@ -43,9 +44,11 @@ module.exports.update = async function(req, res){
       //after changing /users/profile/344 (344 id of user which exits in db)
       //for preventing this we have written if condition
       else {
+           req.flash('error', "Unauthorized");  
            return res.status(401).send('Unauthorized');
       }
   }catch(err){
+      req.flash('error', err);  
       console.log("error while updating profile", err);
       return res.redirect('back') //back to home page or from where I was coming from
   }
@@ -132,6 +135,7 @@ module.exports.create = async function(req, res) {
       try {
         // user will be redirected to same sign-up page if password/cnf pass does not match
           if (req.body.password != req.body.confirm_password) {
+              req.flash('alert', "Your password and confirm password should match");
               console.log('Your password and confirm password should match');
               return res.redirect('back');
           }
@@ -148,16 +152,19 @@ module.exports.create = async function(req, res) {
           // this new user is not present in database
           if (!newUser) { 
               const creatingUserInDb = await User.create(req.body);
+              req.flash('success', "User created successfully in the database");
               console.log('User created successfully in the database',creatingUserInDb);
               return res.redirect('/users/sign-in');
 
           }
           // user with the same email id already exists in database so simply redirect to the sign-up page 
           else {
+              req.flash('error', "User with this email id already exists");
               console.log('User with this email id already exists', newUser.email);
               return res.redirect('back');
           }
       } catch (err) {
+          req.flash('error', err);
           console.error('An error occurred during user registration:', err);
           return res.redirect('/users/sign-up');
       }
@@ -171,8 +178,8 @@ module.exports.create = async function(req, res) {
   module.exports.createSession = function(req, res){
     //setting a flsh object into req
       req.flash('success', "Logged in succcessfully!");
-      return res.redirect('/');
-    //
+      return res.redirect('/'); // back to home page
+
   }
 
   // sign out
@@ -181,9 +188,10 @@ module.exports.create = async function(req, res) {
           // logout() fn provided by passport.js to req
           req.logout(function(err){
             if(err){
-              console.log("Error while logout", err);
+              req.flash('error', err);
+              //console.log("Error while logout", err);
             }
           });
           req.flash('success', "You have logged out!"); 
-          return res.redirect('/'); ///to home page
+          return res.redirect('back'); ///to home page
   }
