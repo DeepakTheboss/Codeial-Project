@@ -25,16 +25,22 @@ li .post-comments {
       padding: 2px; }
     li .post-comments form #add-comment {
       width: 20%;
-      padding: 2px;
-      background-color: #f0b4e6; }
+      padding: 5px;
+      box-shadow: 0 0 10px rgba(7, 240, 15, 0.2); }
     li .post-comments form input[type="text"],
     li .post-comments form input[type="submit"] {
       /* Styles for the text input and submit button in the comment form */
       width: 100%;
       padding: 5px;
       margin-bottom: 10px;
-      border: 1px solid #ccc;
       border-radius: 5px; }
+    li .post-comments form input[type="submit"] {
+      background-color: #870778;
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.3s; }
+    li .post-comments form input[type="submit"]:hover {
+      background-color: #cb3636; }
 
 li #post-comments-list ul {
   list-style-type: none;

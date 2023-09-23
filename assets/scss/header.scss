@@ -6,7 +6,7 @@ heading {
     background-color: #644597;
     color: white;
     font-size: 20px;
-    padding: 10px;
+    padding: 0;   // if increase the padding in the px and find the changes in the page intresting took time to solve
     display: flex;
     justify-content: space-between; // Align content to the right
     align-items: center; // Vertically center content

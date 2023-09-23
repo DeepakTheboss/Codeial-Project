@@ -5,10 +5,10 @@
 
    <!-- Posts need to render on home page so will make a form which user will share or post-->
       <section id = "feed-posts">
-            <h4>Posts</h4>
+            <h3>Posts</h3>
             <!-- if user is not signedIn then don't show the post form or signed In user can see the post form-->
             <% if(locals.user) { %>
-            <form action="/posts/create" id = "new-post-form" method="POST">
+            <form action="/posts/create" id = "new-post-form" method="POST" >
                <textarea name="content" cols="30" rows="5" placeholder="Type here..."></textarea>
                <input type="submit" value ="Post">
             </form>
@@ -26,7 +26,7 @@
       </section>
 
       <section id = "user-friends">
-            <h4>Friends List</h4>
+            <h3>Friends List</h3>
             <!-- listing all users  only when current user is logged in-->
             <% if(locals.user) { %> 
             <% for(u of all_users) {  %>

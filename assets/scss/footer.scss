@@ -1,10 +1,34 @@
 
-    footer {
+    // footer {
         
-        background-color: #644597;
-        color: white;
-        padding: 10px;
-        display: flex;
-        justify-content: space-between; // Align content to the right
-        align-items: center; // Vertically center content
-    }
+    //     background-color: #644597;
+    //     color: white;
+    //     padding: 10px;
+    //     display: flex;
+    //     justify-content: space-between; // Align content to the right
+    //     align-items: center; // Vertically center content
+    
+    // }
+
+   // styles.scss
+
+// This is SCSS styling for a fixed footer
+
+// body {
+//     margin: 0;
+//     padding: 0;
+//   }
+  
+  footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #644597;
+    color: white;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+   

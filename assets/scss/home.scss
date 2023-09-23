@@ -1,17 +1,70 @@
 // this is scss styling file to give style to home.ejs and after this when it will get compile to home.css
 // then we will link this home.css file in the home.ejs 
 // basiclly we are taking the post at left and freind at right side
+
 #home-container {
     display: flex;
-    height: 100%;
+    //height: 100%;
+    width: 100%;
+    padding-bottom: 2%;
+    
+    #new-post-form {
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+      padding: 20px;
+      margin-bottom: 20px;
+  
+      h3 {
+        font-size: 30px;
+        margin-bottom: 10px;
+      }
+  
+      textarea {
+        width: 60%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        margin-bottom: 10px;
+      }
+  
+      input[type="submit"] {
+        background-color: #333;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+  
+        &:hover {
+          background-color: #555;
+        }
+      }
+  
+     
+    }
+
     #feed-posts {
         width: 70%;
         padding: 10px;
+
+        #posts-list-container{
+            ul{
+                list-style-type: none;
+                padding: 0;
+            }
+        }
     }
     #user-friends {
         width: 30%;
-        padding: 10px;
+        padding-left: 10px;
         border-left: 2px solid lightgray;
+        p {
+           a {
+            text-decoration: none;
+            color:#fff;
+            font-size: 24px;
+           }
+        }
     }
-
 }

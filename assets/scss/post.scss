@@ -39,8 +39,8 @@ li{
 
       #add-comment{
         width: 20%;
-        padding: 2px;
-        background-color: rgb(240, 180, 230);
+        padding: 5px;
+        box-shadow: 0 0 10px rgba(7, 240, 15, 0.2);
       }
 
       input[type="text"],
@@ -49,9 +49,24 @@ li{
         width: 100%;
         padding: 5px;
         margin-bottom: 10px;
-        border: 1px solid #ccc;
+       // border: 1px solid #1c1919;
         border-radius: 5px;
+       
         }
+
+        input[type="submit"] {
+          background-color: #870778;
+          color: white;
+          cursor: pointer;
+          transition: background-color 0.3s;
+      }
+
+        input[type="submit"]:hover {
+          background-color: #cb3636;
+      }
+
+
+      
     }
   }
     
