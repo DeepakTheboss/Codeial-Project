@@ -1,0 +1,36 @@
+body {
+  background: #833ab4;
+  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to right, #fcb045, #fd1d1d, #833ab4);
+  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to right, #fcb045, #fd1d1d, #833ab4);
+  /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */ }
+
+h1 {
+  font-size: 24px;
+  text-align: center;
+  margin-bottom: 20px; }
+
+#sign-in-form {
+  width: 30%;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  margin: 0 auto; }
+  #sign-in-form input[type="email"],
+  #sign-in-form input[type="password"],
+  #sign-in-form input[type="submit"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px; }
+  #sign-in-form input[type="submit"] {
+    background-color: #ed9819;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s; }
+  #sign-in-form input[type="submit"]:hover {
+    background-color: #555; }

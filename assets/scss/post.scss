@@ -1,0 +1,67 @@
+// styles.sass
+
+// This is SASS styling for the <li> element within a list
+
+li{
+  p{
+     
+     margin-bottom: 10px; /* Styles for the paragraph containing post content */
+
+     small {
+        font-size: 12px;  /* Styles for the small text within the paragraph */
+     }
+
+     a {
+        /* Styles for the delete post link */
+        text-decoration: none;
+        color: red;
+        font-size: 12px;
+        margin-left: 10px;
+     }
+       
+  }
+   
+  .post-comments {
+    /* Styles for the comment form container */
+    margin-top: 10px;
+
+    form {
+      /* Styles for the comment form */
+      display: flex;
+      flex-direction: row;
+      width: 50%;
+      justify-content: space-between;
+      
+      #type-comment{
+        width:75%;
+        padding: 2px;
+      }
+
+      #add-comment{
+        width: 20%;
+        padding: 2px;
+        background-color: rgb(240, 180, 230);
+      }
+
+      input[type="text"],
+      input[type="submit"]{
+        /* Styles for the text input and submit button in the comment form */
+        width: 100%;
+        padding: 5px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        }
+    }
+  }
+    
+
+  #post-comments-list{
+        ul{
+            list-style-type: none;
+            padding: 0;
+        }
+  }
+    
+
+}          

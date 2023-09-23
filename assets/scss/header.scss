@@ -1,0 +1,52 @@
+// styles.scss
+
+
+
+heading {
+    background-color: #644597;
+    color: white;
+    font-size: 20px;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between; // Align content to the right
+    align-items: center; // Vertically center content
+    width: 100%;
+
+
+        ul {
+            list-style-type: none;
+            padding-right: 2%;
+            padding-left: 5%;
+            margin: 0;
+            display: flex;
+            justify-content: space-between;
+            width: 20%;
+
+            li {
+                margin-bottom: 10px;
+            }
+
+        
+            
+            a {
+                text-decoration: none;
+                padding: 10px 20px;
+                background-color: #59c5e7;
+                color: white;
+                border-radius: 5px;
+               // display: inline-block;
+            }
+
+            a:hover {
+                background-color:rgb(221, 94, 196);
+            }
+        
+        }
+}
+
+
+
+
+
+
+

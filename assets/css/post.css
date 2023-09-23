@@ -1,0 +1,41 @@
+li p {
+  margin-bottom: 10px;
+  /* Styles for the paragraph containing post content */ }
+  li p small {
+    font-size: 12px;
+    /* Styles for the small text within the paragraph */ }
+  li p a {
+    /* Styles for the delete post link */
+    text-decoration: none;
+    color: red;
+    font-size: 12px;
+    margin-left: 10px; }
+
+li .post-comments {
+  /* Styles for the comment form container */
+  margin-top: 10px; }
+  li .post-comments form {
+    /* Styles for the comment form */
+    display: flex;
+    flex-direction: row;
+    width: 50%;
+    justify-content: space-between; }
+    li .post-comments form #type-comment {
+      width: 75%;
+      padding: 2px; }
+    li .post-comments form #add-comment {
+      width: 20%;
+      padding: 2px;
+      background-color: #f0b4e6; }
+    li .post-comments form input[type="text"],
+    li .post-comments form input[type="submit"] {
+      /* Styles for the text input and submit button in the comment form */
+      width: 100%;
+      padding: 5px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px; }
+
+li #post-comments-list ul {
+  list-style-type: none;
+  padding: 0; }

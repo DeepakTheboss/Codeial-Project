@@ -1,0 +1,27 @@
+heading {
+  background-color: #644597;
+  color: white;
+  font-size: 20px;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%; }
+  heading ul {
+    list-style-type: none;
+    padding-right: 2%;
+    padding-left: 5%;
+    margin: 0;
+    display: flex;
+    justify-content: space-between;
+    width: 20%; }
+    heading ul li {
+      margin-bottom: 10px; }
+    heading ul a {
+      text-decoration: none;
+      padding: 10px 20px;
+      background-color: #59c5e7;
+      color: white;
+      border-radius: 5px; }
+    heading ul a:hover {
+      background-color: #dd5ec4; }
