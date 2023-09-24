@@ -10,8 +10,10 @@ module.exports.create = async function(req, res){
         //coming from setAuthenticatedUser from localStrategy.js (binding with minimal input
         // that is user._id present in db)
         user : req.user._id });   // if user is not signed in then will not get _id
+        
       // if post object is there then
       if(post){
+       
         // now recieving the form data (JSON data) using this action
         // check if the requset is AJAX or not
         if(req.xhr){

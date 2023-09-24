@@ -1,3 +1,5 @@
+
+<!-- Adding id here bcs at some point I need to delete this post-->
 <li id="post-<%= post._id %> ">
     <p>
         <!-- deleting post in UI url-->
@@ -6,6 +8,8 @@
         and post.user.id is '98765987' string format-->
         <% if(locals.user && locals.user.id == post.user.id) { %>
             <small>
+                <!-- added class here bcs we can do styling and in 
+                    future we will be to delete the post using ajax-->
                <a class="delete-post-button" href="/posts/destroy/<%= post.id %>">Delete Post(X)</a>
             </small>
          <% } %>   

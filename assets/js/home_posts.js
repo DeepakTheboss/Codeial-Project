@@ -19,7 +19,10 @@
                 //if req successfull then 
                 success: function(data){
                    // console.log(data.data.post);  //JSON data 
-                   let newPost = newPostDom(data.data.post);
+                   let newPost = newPostDom(data.data.post); // now post is created 
+                   // we need to add each post on div of "post-list-container" to <ul> tag and then looping 
+                   //over multiple posts
+                   // prepend means adding a newly post post to top in the post-list-container
                    $('#posts-list-container >ul').prepend(newPost);
                 },
                 error: function(error){
@@ -31,13 +34,12 @@
     }
 
     // method to create post in DOM
+    // we need a function which will help us in converting our(_post.ejs) text of html into jquery Object
+    // "post" is reccieved from post controllers
         let newPostDom = function(post){
             return $(` <li id="post- ${post._id } ">
             <p>
-                <!-- deleting post in UI url-->
-                <!-- locals.user is signedIn user & id of user who currently  signedIn == id of user who made a post-->
-                <!-- post.user is user's id only but in ObjectId('98765432') form 
-                and post.user.id is '98765987' string format-->
+               
                 
                     <small>
                        <a class="delete-post-button" href="/posts/destroy/ ${post._id }">Delete Post(X)</a>
