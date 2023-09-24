@@ -1,4 +1,4 @@
-<li>
+<li id="post-<%= post._id %> ">
     <p>
         <!-- deleting post in UI url-->
         <!-- locals.user is signedIn user & id of user who currently  signedIn == id of user who made a post-->
@@ -6,7 +6,7 @@
         and post.user.id is '98765987' string format-->
         <% if(locals.user && locals.user.id == post.user.id) { %>
             <small>
-               <a href="/posts/destroy/<%= post.id %>">Delete Post(X)</a>
+               <a class="delete-post-button" href="/posts/destroy/<%= post.id %>">Delete Post(X)</a>
             </small>
          <% } %>   
 
@@ -20,7 +20,7 @@
     <div class="post-comments">
         <% if(locals.user){%> 
             <form action="/comments/create" method="POST">
-                <input type="text" name="content" placeholder="type here to add comment..." id="type-comment">
+                <input type="text" name="content" placeholder="type here to add comment..." id="type-comment" required>
                 <input type="hidden" name="post"  value="<%= post._id %>" >
                 <input type="submit" value="Add Comment" id="add-comment">
             </form>

@@ -1,4 +1,4 @@
-const { response } = require('express');
+ const { response } = require('express');
 const User = require('../models/user');
 
 
@@ -34,7 +34,7 @@ module.exports.update = async function(req, res){
         req.flash('success', "Profie updated successfully !!");  
         console.log("Profie updated successfully !!", user);
         console.log( "this is body:", req.body);
-        return res.redirect('back');
+        return res.redirect('/');
 
       }
       //Signed In user updating another user profile by inspecting the update html form 
@@ -178,7 +178,7 @@ module.exports.create = async function(req, res) {
   module.exports.createSession = function(req, res){
     //setting a flsh object into req
       req.flash('success', "Logged in succcessfully!");
-      return res.redirect('/'); // back to home page
+      return res.redirect('/'); // back to signIn page
 
   }
 

@@ -7,6 +7,9 @@ heading {
   justify-content: space-between;
   align-items: center;
   width: 100%; }
+  heading h1 a {
+    text-decoration: none;
+    color: #fff; }
   heading ul {
     list-style-type: none;
     padding-right: 2%;

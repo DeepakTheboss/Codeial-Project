@@ -8,6 +8,7 @@
       footer.css-->
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.min.css">
       <script src = "https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.min.js"></script>
+      <script src = "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
       <link rel="stylesheet" href="/css/layout.css">
 
       <!-- including styles of header and footer which is comes from heaader.scss and footer.scss
@@ -53,7 +54,7 @@
               theme: 'relax',
               text: '<%=flash.success %>',
               type: 'success',
-              layout:'topRight',
+              layout:'topCenter',
               timeout:1500
               }).show();
            <% }%> 
@@ -63,7 +64,7 @@
               theme: 'relax',
               text: "<%= flash.error %>",
               type: 'error',
-              layout:'topRight',
+              layout:'topCenter',
               timeout:1500
               }).show();
           <% } %>

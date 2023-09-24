@@ -12,6 +12,17 @@ module.exports.create = async function(req, res){
         user : req.user._id });   // if user is not signed in then will not get _id
       // if post object is there then
       if(post){
+        // now recieving the form data (JSON data) using this action
+        // check if the requset is AJAX or not
+        if(req.xhr){
+          return res.status(200).json({
+            data :{
+              post: post // newly created post
+            },
+            message: "Post created!"
+          })
+        }
+
         req.flash('success', "Post is created successfully!!");
         //console.log("Post is created successfully!!", post);
         return res.redirect('back'); //or '/',  back to the home page

@@ -10,7 +10,7 @@
   <h2>Update your profile by filling this form</h2>
   <form action="/users/update/<%= profile_user.id%>" method="POST" id="profile-form">
     <input type="text" name="name" placeholder="Your Name" value="<%= profile_user.name %>"required />
-    <input type="email" name="email" pla ceholder="Your email" value="<%= profile_user.email %>" required />
+    <input type="email" name="email" placeholder="Your email" value="<%= profile_user.email %>" required />
     <input type="submit" value="Edit Profile" />
   </form>
   
