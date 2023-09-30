@@ -15,6 +15,8 @@ module.exports.create = async function (req, res) {
       });
       // if comment created successfully then we need to add comment to the post
       if (comment) {
+
+       
         req.flash('success', "Comment added successfully to post");
         //console.log("Comment added successfully to post", comment);
         await comment.save();
@@ -24,6 +26,15 @@ module.exports.create = async function (req, res) {
         // comment coming from line no. 17
         post.comments.push(comment);
         await post.save();
+        if(req.xhr){
+          return res.status(200).json({
+            data :{
+              comment: comment // newly created post
+            },
+            message: "Comment created!"
+          })
+        }
+        
 
         return res.redirect("back"); // back to home page or '/'
       } else {
@@ -73,6 +84,14 @@ module.exports.destroy = async function (req, res) {
       
       //and delete that comment
       await comment.deleteOne();
+      if(req.xhr){
+        return res.status(200).json({
+            data: {
+                comment_id: req.params.id
+            },
+            message: "Comment deleted"
+        });
+     }
       //and find that post and delete the comment that u wanted from this post
       // means simlpy updating the post
       
@@ -82,8 +101,8 @@ module.exports.destroy = async function (req, res) {
       console.log("After deleting a comment from post ", post.comments);
       // post updated
       if (post) {
-        req.flash('success', "Post object upated successfully by removing an comment");
-        console.log("Post object upated successfully by removing an comment");
+        req.flash('success', "Comment removed from current post");
+        console.log("Comment removed from current post");
         return res.redirect('back'); //back to home page
       } else {
         req.flash('error', "error while deleting a comment from a post");

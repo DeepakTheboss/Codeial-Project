@@ -1,6 +1,6 @@
-<li>
+<li id="comment-${comment._id }">
     <p>
-        <a href="/comments/destroy/<%= comment.id %>">Delete Comment(X)</a>
+        <a class = "delete-comment-button" href="/comments/destroy/<%=comment._id %>">Delete Comment(X)</a>
      </small>
 
              <%= comment.content %>
@@ -10,3 +10,5 @@
              </small>
          </p>
   </li>
+
+  

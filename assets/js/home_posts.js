@@ -3,8 +3,9 @@
     //create a function which sends the data to the post_controller's action(create) using AJAX
     let createPost = function(){
         let  newPostForm = $('#new-post-form'); // get the post form
-        // form data should not be submitted normally , we can submit the form data using AJAX,
-        //So for that e.preventDefault() is used
+        //e.preventDefault() is used for to stop working of submit button that follows normally
+        // i.e means when we click on submit button then flow goes to action="/create" this is normal flow 
+        // but we want to stop this flow and want to working using AJAX method on the submit button
 
         newPostForm.submit(function(e){
             e.preventDefault();
@@ -12,37 +13,46 @@
 
             // manually submit the form asynchronously 
             $.ajax({
-                type:'post',
+                type:'POST',
                 url:'/posts/create',
                 data: newPostForm.serialize(),  //convert form data to JSON
 
                 //if req successfull then 
                 success: function(data){
-                   // console.log(data.data.post);  //JSON data 
+                   console.log("Data:", data);  //JSON data 
                    let newPost = newPostDom(data.data.post); // now post is created 
+                   new Noty({
+                    theme: 'relax',
+                    text: "Post Created",
+                    type: 'success',
+                    layout: 'TopCenter',
+                    timeout: 1500
+                }). show();// neeraj walia
                    // we need to add each post on div of "post-list-container" to <ul> tag and then looping 
                    //over multiple posts
-                   // prepend means adding a newly post post to top in the post-list-container
+                   // prepend jquery fn means adding a newly post  to top in the post-list-container
                    $('#posts-list-container >ul').prepend(newPost);
-                },
+                   deletePost($(' .delete-post-button', newPost)); //
+                  // new PostComments(data.data.post._id);
+                },  
                 error: function(error){
                     console.log(error.responseText);
                 }
 
-            })
-        })
+            });
+        });
     }
 
     // method to create post in DOM
     // we need a function which will help us in converting our(_post.ejs) text of html into jquery Object
     // "post" is reccieved from post controllers
+
+    // we have removed the if condtion bcs we have kept condtion in home.ejs ans _post.ejs views 
         let newPostDom = function(post){
-            return $(` <li id="post- ${post._id } ">
+            return $(` <li id="post-${post._id }">
             <p>
-               
-                
                     <small>
-                       <a class="delete-post-button" href="/posts/destroy/ ${post._id }">Delete Post(X)</a>
+                       <a class="delete-post-button" href="/posts/destroy/${post._id }">Delete Post(X)</a>
                     </small>
                    
         
@@ -66,13 +76,49 @@
             <!-- for viewing the comments signedIn not required-->
             <div id = "post-comments-list">
                 <ul id="post-comments- ${post._id }">
-            
-                       
                 </ul>
             </div>
         
         </li> `)
         } 
 
+        // method to delete a post from DOM
+        let deletePost = function(deleteLink){   // this deletePost function gets the deleteLink
+            $(deleteLink).click(function(e){     // when this deleteLink clicked its should not follow
+                e.preventDefault();
+
+                $.ajax({
+                    type: 'GET',
+                    url: $(deleteLink).prop('href'),
+                    success: function(data){
+                        console.log("Post Id:", data.data);
+                        $(`#post-${data.data.post_id}`).remove();
+                        new Noty({
+                            theme: 'relax',
+                            text: "Post deleted",
+                            type: 'success',
+                            layout: 'TopCenter',
+                            timeout: 1500
+                        }). show();
+                    }, error: function(error){
+                            console.log(error.responseText);
+                    }
+                });
+            })
+        }
+
+        // loop over all the existing posts on the page (when the window loads for the first time) and call the delete post method on delete link of each, also add AJAX (using the class we've created) to the delete button of each
+        // let convertPostsToAjax = function(){
+        //     $('#posts-list-container>ul>li').each(function(){
+        //         let self = $(this);
+        //         let deleteButton = $(' .delete-post-button', self);
+        //         deletePost(deleteButton);
+    
+        //         // get the post's id by splitting the id attribute
+        //         let postId = self.prop('id').split("-")[1]
+        //         new PostComments(postId);
+        //     });
+        // }
     createPost();
+    //convertPostsToAjax();
 }

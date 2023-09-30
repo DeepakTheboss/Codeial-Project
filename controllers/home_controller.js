@@ -30,7 +30,9 @@ module.exports.home = async function(req, res){
 
 
      // populate the user of each post(mongoose populate)
-     const posts = await Post.find({}).populate('user')
+     const posts = await Post.find({})
+     .sort('-createdAt')
+     .populate('user')
      // poulate the comments and author of comments
      .populate({
         path:'comments',

@@ -13,6 +13,7 @@ module.exports.create = async function(req, res){
         
       // if post object is there then
       if(post){
+        console.log("Post Object: ", post);
        
         // now recieving the form data (JSON data) using this action
         // check if the requset is AJAX or not
@@ -56,6 +57,15 @@ module.exports.destroy = async function(req, res){
     //.id means converting the object id to string
     if(post.user == req.user.id){
        await post.deleteOne(); // post.remove() is not working in newer version
+
+       if(req.xhr){
+          return res.status(200).json({
+              data: {
+                  post_id: req.params.id
+              },
+              message: "Post deleted"
+          });
+       }
        // and then delete all the comments associated with that post
        const deletedComments = await Comment.deleteMany({post: req.params.id});
        if(deletedComments) {
