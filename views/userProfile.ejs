@@ -8,9 +8,10 @@
     form present in home.ejs)-->
   <% if(locals.user.id == profile_user.id){%>
   <h2>Update your profile by filling this form</h2>
-  <form action="/users/update/<%= profile_user.id%>" method="POST" id="profile-form">
+  <form action="/users/update/<%= profile_user.id%>" method="POST" id="profile-form" enctype="multipart/form-data">
     <input type="text" name="name" placeholder="Your Name" value="<%= profile_user.name %>"required />
     <input type="email" name="email" placeholder="Your email" value="<%= profile_user.email %>" required />
+    <input type="file" name="avatar" placeholder="Profile Picture">
     <input type="submit" value="Edit Profile" />
   </form>
   

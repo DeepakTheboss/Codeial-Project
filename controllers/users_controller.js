@@ -1,4 +1,4 @@
- const { response } = require('express');
+const { response } = require('express');
 const User = require('../models/user');
 
 
@@ -21,37 +21,71 @@ module.exports.profile = async function(req,res){
 }
 
 module.exports.update = async function(req, res){
-  try{
-     // SignedIn user can update only his/her profile 
-      if(req.user.id == req.params.id){
-       // console.log( "this is body:", req.body);
-        const user = await User.findByIdAndUpdate(req.params.id,
-          {
-            name: req.body.name,
-            email: req.body.email
-          }, 
-          { new: true });
-        req.flash('success', "Profie updated successfully !!");  
-        console.log("Profie updated successfully !!", user);
-        console.log( "this is body:", req.body);
-        return res.redirect('/');
+  // try{
+  //    // SignedIn user can update only his/her profile 
+  //     if(req.user.id == req.params.id){
+  //       console.log( "this is body:", req.body);
+  //       const user = await User.findByIdAndUpdate(req.params.id,
+  //         {
+  //           name: req.body.name,
+  //           email: req.body.email
+  //         }, 
+  //         { new: true });
+  //       console.log("Profie updated successfully !!", user);
+  //       console.log( "this is body:", req.body);
+  //       return res.redirect('back');
 
-      }
-      //Signed In user updating another user profile by inspecting the update html form 
-      // then he will take id of any user and replace with id of user that is coming from 
-      //String params to someone else id
-      //eg. /users/profile/122  (122 id of user coming from update profile form i.e string params) 
-      //after changing /users/profile/344 (344 id of user which exits in db)
-      //for preventing this we have written if condition
-      else {
-           req.flash('error', "Unauthorized");  
-           return res.status(401).send('Unauthorized');
-      }
-  }catch(err){
-      req.flash('error', err);  
-      console.log("error while updating profile", err);
-      return res.redirect('back') //back to home page or from where I was coming from
-  }
+  //     }
+  //     //Signed In user updating another user profile by inspecting the update html form 
+  //     // then he will take id of any user and replace with id of user that is coming from
+  //     //String params to someone else id
+  //     //eg. /users/profile/122  (122 id of user coming from update profile form i.e string params) 
+  //     //after changing /users/profile/344 (344 id of user which exits in db)
+  //     //for preventing this we have written if condition
+  //     else {
+  //          return res.status(401).send('Unauthorized');
+  //     }
+  // }catch(err){
+  //     console.log("error while updating profile", err);
+  //     return res.redirect('back') //back to home page or from where I was coming from
+  // }
+
+  // current user is the one is being edited or updated
+    if(req.user.id == req.params.id){
+        try{
+            let user = await User.findById(req.params.id); // we are finding the user from the body of form 
+            // but we cant access the form data directly because the form data is now multipart or encrypted
+            // so my body parser is not able to parse because this is a multipart form
+            // for that multer has been deployed and uploadedAvatar <-- this is the function which will help it processes the request
+            // uploadedAvatar takes req as a parameter and multer process this request
+            User.uploadedAvatar(req, res, function(err){
+              if(err){
+                console.log('****Multer error',err)
+              }
+
+              console.log(req.file); // request contains the file
+
+              // now from below we can access the form data because we have process the req using multer
+              user.name = req.body.name;
+              user.email = req.body.email;
+
+              // here we are putting a check that user will not upload file everytime
+              // so whenever the user will upload a file then only we will update userprofile
+              if(req.file){
+                // this is saving the path of the uploaded file into the avatar field in the user
+                user.avatar = User.avatarPath + '/' + req.file.filename;
+              }
+              user.save();
+              return res.redirect('back');  // we need to return something otherwise our page will stuck at loading
+            });
+        }catch{
+              req.flash('error', err);
+              return res.redirect('back');
+        }
+    }else{
+          req.flash('error','Unauthorized');
+          return res.status(401).send('Unauthorized');
+    }
 }
 // these are actions not the routes which u type in browser
  /* 
@@ -135,7 +169,6 @@ module.exports.create = async function(req, res) {
       try {
         // user will be redirected to same sign-up page if password/cnf pass does not match
           if (req.body.password != req.body.confirm_password) {
-              req.flash('alert', "Your password and confirm password should match");
               console.log('Your password and confirm password should match');
               return res.redirect('back');
           }
@@ -152,19 +185,16 @@ module.exports.create = async function(req, res) {
           // this new user is not present in database
           if (!newUser) { 
               const creatingUserInDb = await User.create(req.body);
-              req.flash('success', "User created successfully in the database");
               console.log('User created successfully in the database',creatingUserInDb);
               return res.redirect('/users/sign-in');
 
           }
           // user with the same email id already exists in database so simply redirect to the sign-up page 
           else {
-              req.flash('error', "User with this email id already exists");
               console.log('User with this email id already exists', newUser.email);
               return res.redirect('back');
           }
       } catch (err) {
-          req.flash('error', err);
           console.error('An error occurred during user registration:', err);
           return res.redirect('/users/sign-up');
       }
@@ -176,10 +206,10 @@ module.exports.create = async function(req, res) {
 
   // sign in and create a seesion for the user
   module.exports.createSession = function(req, res){
-    //setting a flsh object into req
+    //setting a flash object into req
       req.flash('success', "Logged in succcessfully!");
-      return res.redirect('/'); // back to signIn page
-
+      return res.redirect('/');
+    //
   }
 
   // sign out
@@ -188,10 +218,9 @@ module.exports.create = async function(req, res) {
           // logout() fn provided by passport.js to req
           req.logout(function(err){
             if(err){
-              req.flash('error', err);
-              //console.log("Error while logout", err);
+              console.log("Error while logout", err);
             }
           });
           req.flash('success', "You have logged out!"); 
-          return res.redirect('back'); ///to home page
+          return res.redirect('/'); ///to home page
   }

@@ -13,6 +13,7 @@
   margin: 0 auto; }
   #userprofile-form #profile-form input[type="text"],
   #userprofile-form #profile-form input[type="email"],
+  #userprofile-form #profile-form input[type="file"],
   #userprofile-form #profile-form input[type="submit"] {
     width: 100%;
     padding: 10px;
