@@ -1,5 +1,6 @@
-const { response } = require('express');
 const User = require('../models/user');
+const fs = require('fs');
+const path = require('path');
 
 
 module.exports.profile = async function(req,res){
@@ -72,9 +73,31 @@ module.exports.update = async function(req, res){
               // here we are putting a check that user will not upload file everytime
               // so whenever the user will upload a file then only we will update userprofile
               if(req.file){
+                //if user is having old avatar and want to update his/her avatar then if will run
+                if(user.avatar){
+                    // // removing the old pic or avatar
+                    // fs.unlinkSync(path.join(__dirname, "..", user.avatar));
+                    // // uploading a new avatar
+                    // user.avatar = User.avatarPath + '/' + req.file.filename;
+                     // Verify and construct the absolute file path
+                    const oldAvatarPath = path.join(__dirname, '..', user.avatar);
+
+                    // Check if the file exists before attempting to delete it
+                    if (fs.existsSync(oldAvatarPath)) {
+                        // Delete the old avatar file
+                        fs.unlinkSync(oldAvatarPath);
+                    }
+    
+
+                // Save the path of the newly uploaded file into the 'avatar' field of the user
+                user.avatar = User.avatarPath + '/' + req.file.filename;
+                }
+                // if user is uploading avatar for 1st time
+                else {
                 // this is saving the path of the uploaded file into the avatar field in the user
                 user.avatar = User.avatarPath + '/' + req.file.filename;
               }
+            }
               user.save();
               return res.redirect('back');  // we need to return something otherwise our page will stuck at loading
             });

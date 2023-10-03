@@ -1,6 +1,6 @@
 #avatar-image {
-  height: 500px;
-  width: 500px;
+  height: 100px;
+  width: 120px;
   z-index: 10;
   background-repeat: no-repeat; }
 
@@ -9,7 +9,7 @@
   text-align: center;
   margin-bottom: 20px; }
 
-#profile-form {
+#userprofile-form #profile-form {
   width: 20%;
   background-color: #fff;
   padding: 20px;
@@ -17,23 +17,19 @@
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   text-align: center;
   margin: 0 auto; }
-
-#profile-form input[type="text"],
-#profile-form input[type="email"],
-#profile-form input[type="file"],
-#profile-form input[type="submit"] {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px; }
-
-#profile-form input[type="submit"] {
-  /* background-color: #333; */
-  background-color: #dc85cd;
-  color: white;
-  cursor: pointer;
-  transition: background-color 0.3s; }
-
-#profile-form input[type="submit"]:hover {
-  background-color: #555; }
+  #userprofile-form #profile-form input[type="text"],
+  #userprofile-form #profile-form input[type="email"],
+  #userprofile-form #profile-form input[type="file"],
+  #userprofile-form #profile-form input[type="submit"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px; }
+  #userprofile-form #profile-form input[type="submit"] {
+    background-color: #dc85cd;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s; }
+  #userprofile-form #profile-form input[type="submit"]:hover {
+    background-color: #555; }

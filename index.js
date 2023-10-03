@@ -40,7 +40,7 @@ app.use(cookieParser());
 app.use(express.static('./assets'));
 
 // make the upload path available to browser
-app.use('uploads', express.static(__dirname + '/uploads'));
+app.use('/uploads', express.static(__dirname + '/uploads'));
 // Extract style and scripts from sub pages (views e.g., userProfiles.ejs, etc.)
 app.set('layout extractStyles', true);
 app.set('layout extractScripts', true);
