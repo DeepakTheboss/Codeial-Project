@@ -4,7 +4,7 @@ const multer = require('multer');
 const path = require('path');
 // converts '/uploads/users/avatars' string to path using path module
 const AVATAR_PATH = path.join('/uploads/users/avatars'); 
-//const AVATAR_OLD_PATH = path.join('/uploads/users/avatars'); 
+
 
 
 

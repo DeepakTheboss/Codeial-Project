@@ -17,6 +17,8 @@ router.use('/users', require('./users')); //sub-routes
 router.use('/posts', require('./posts'));
 
 router.use('/comments', require('./comments'));
+// this is sub routes
+router.use('/api', require('./api'));
 
 module.exports = router;
 
