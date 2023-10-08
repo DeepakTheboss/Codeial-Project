@@ -12,7 +12,8 @@ const passport = require('passport');
 const passportLocal = require('./config/passport-local-strategy');
 //including passportJwt strategy here
 const passportJWT = require('./config/passport-jwt-strategy');
-
+//including passportGoogle strategy here
+const passportGoogle = require('./config/passport-google-oauth2.strategy');
 // Saving session info to the db
 const MongoStore = require('connect-mongo');
 // used for compiling the scss or sass files into css

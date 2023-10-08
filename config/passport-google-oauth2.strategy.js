@@ -10,16 +10,18 @@ passport.use(new googleStrategy(
     {
     clientID:"897686259244-qvi5jovgifpakl7icte15dsff9df99p6.apps.googleusercontent.com",
     clientSecret: "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",
-    callbackURL: "http://localhost:8000/users/auth/google/callback"
+    callbackURL: "http://localhost:8000/users/auth/google/callback",
+    passReqToCallback: true // then "req" will be 1st argument in async function
    },
 
    // 1. As we generate JWT token called as accessToken for authentiating other requests
    // in similar manner google also generate accessToken for us
    // and if accessToken expires the we use refreshToken to generate a new accessToken if user is not signed-In
-   async function(accessToken, refreshToken, profile, done){
-    // checking user found in codeial db or not 
-    const user = await User.findOne({ email: profile.emails[0].value });
+   async function(req, accessToken, refreshToken, profile, done){
+    
       try{
+        // checking user found in codeial db or not 
+      const user = await User.findOne({ email: profile.emails[0].value });
         console.log("Profile: ", profile);  
         // user found on codeial DB then signs In and set user as req.user
         if(user){
@@ -37,6 +39,11 @@ passport.use(new googleStrategy(
                 // generatting a reandom password in hex
                 password: crypto.randomBytes(20).toString('hex'),
               });
+              // if error while creating a newly user or user not found 
+              if(!newUser){
+                console.log('Error in craeting user via Google strategy-passport:');
+                return done(null, false);
+              }
               return done(null, newUser);
         }
     }

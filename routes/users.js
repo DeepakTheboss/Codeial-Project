@@ -22,8 +22,17 @@ router.post('/create-session', passport.authenticate(
     {failureRedirect: '/users/sign-in'},
 ),usersController.createSession);
 
-
-
-
 router.get('/sign-out', usersController.destroySession);
+
+// this is given by passport /users/auth/google, this is not callback URL
+// scope what all things we wanted to fetch from google like profile, email(as not a part of profile)
+//so we need to request seperatly for email
+router.get('/auth/google', passport.authenticate('google', {scope: ['profile', 'email']}));
+
+// if callback works suuccessfully then it will passed through the middleware of google authentication
+//  then runs createSession action of usercontroller which simply return to homepage
+router.get('/auth/google/callback', passport.authenticate('google',
+{failureRedirect: '/users/sign-in'}), usersController.createSession);
+
+
 module.exports = router;
