@@ -1,31 +1,41 @@
 const Post = require("../models/post"); // Import your Post model here
 const Comment = require("../models/comment"); // Import your Comment model here
+const commentsMailer = require('../mailers/comments_mailer');
 
 module.exports.create = async function (req, res) {
   try {
-    const post = await Post.findById(req.body.post); // where post is name attribute of form
+    let post = await Post.findById(req.body.post); // where post is name attribute of form
 
     if (post) {
       // if post found then we are making a new comment on post
-      const comment = new Comment({
+      // bcs of older syntax for creating comment mailer func not work while commenting on post
+      // const comment = new Comment({
+      //   content: req.body.content,
+      //   // here on each comment we are adding post._id as Comment Schema says
+      //   post: req.body.post,
+      //   user: req.user._id,
+      // });
+
+      // mails works with newer syntax
+      let comment = await Comment.create({
         content: req.body.content,
         // here on each comment we are adding post._id as Comment Schema says
         post: req.body.post,
         user: req.user._id,
       });
-      // if comment created successfully then we need to add comment to the post
-      if (comment) {
 
-       
-        req.flash('success', "Comment added successfully to post");
-        //console.log("Comment added successfully to post", comment);
-        await comment.save();
+        console.log("inside comment controller ", comment);
         // here on each post we are adding array of comments as Post Schema says ()
-
         // post we are fetching from db , comments is coming from post schema and push is func
         // comment coming from line no. 17
         post.comments.push(comment);
-        await post.save();
+        //await 
+        post.save();
+
+        // poulating user on every time need bcs of line no.(12) in comments_nodemailer.js
+        comment = await comment.populate('user', 'name email');
+        // whenever a new comment is going to make after that an email should send
+        commentsMailer.newComment(comment);
         if(req.xhr){
           return res.status(200).json({
             data :{
@@ -34,20 +44,15 @@ module.exports.create = async function (req, res) {
             message: "Comment created!"
           })
         }
-        
-
+        //const stringifiedObj = JSON.stringify(message);
+        req.flash('success', "Comment added successfully to post");
+       //
         return res.redirect("back"); // back to home page or '/'
-      } else {
-        req.flash('error', "Error while making a comment on post");
-        //console.log("Error while making a comment on post");
-        return res.redirect("back");
-      }
-    }
+      } 
+    
   } catch (err) {
     req.flash('error', err);
-    return res.redirect("back");
-    //console.error(err);
-    //return res.status(500).send("Internal Server Error");
+    return  res.redirect("back");
   }
 };
 

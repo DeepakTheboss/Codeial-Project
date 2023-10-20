@@ -16,7 +16,7 @@ let transporter = nodemailer.createTransport({
     // eg. in from section mail you are giving any name
     auth: {
         user: 'deepakjaiswar12098@gmail.com',
-        pass: 'Ultimatix@2030'
+        pass: 'ofrn zprm adgr cbrp'
     }
 });
 
@@ -31,8 +31,7 @@ let renderTemplate = (data, relativePath) => {
     let mailHTML;
     ejs.renderFile(
         path.join(__dirname, '../view/mailers', relativePath),
-        data, // data is like in predefined template we are filling some variables name like name of user, etc.
-        // template varibale is combination of path + data
+        data, 
         function(err, template){
             if(err)
             {
@@ -47,6 +46,22 @@ let renderTemplate = (data, relativePath) => {
     return mailHTML;
 
 }
+
+
+// const renderTemplate = async (data, relativePath) => {
+//     try {
+//         // template varibale is combination of path + data
+//         const template = await ejs.renderFile(
+//             path.join(__dirname, '../view/mailers', relativePath),
+//             data // data is like in predefined template we are filling some variables name like name of user, etc.
+           
+//         );
+//         return template;
+//     } catch (err) {
+//         console.error('Error in rendering template:', err);
+//         return ''; // Return an empty string or handle the error as needed.
+//     }
+// };
 
 module.exports = {
     transporter: transporter,
