@@ -31,8 +31,8 @@ module.exports.create = async function (req, res) {
         // comment coming from line no. 22
         post.comments.push(comment); 
         post.save();
-        let commentId = comment._id; //coming in object form eg. new ObjectId("653585bdaffdfff5e277b0a1")
-        let postId = post._id;
+        //let commentId = comment._id; //coming in object form eg. new ObjectId("653585bdaffdfff5e277b0a1")
+        //  let postId = post._id;
     
         // Use the newer async/await syntax to populate the user fields in both Comment and Post
         comment = await comment.populate('user'); // expanding user object only in comment object
@@ -42,7 +42,7 @@ module.exports.create = async function (req, res) {
 
         // whenever a new comment is going to make after that an email should send
         console.log("inside comment controller ", comment);
-        commentsMailer.newComment(commentUser,postUser);
+        commentsMailer.newComment(comment,commentUser,postUser);
         if(req.xhr){
           return res.status(200).json({
             data :{

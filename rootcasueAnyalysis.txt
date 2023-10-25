@@ -167,7 +167,7 @@ as above content is sent from the codeial to deepak when manohar has commented w
 
  concept: why because codeial will show to deepak hey manohar commented on your post 
           id you want to show manohar detail to deepak then we can show from db of codeial 
-          but its not need.
+          but its not needed.
           because deepak is only intrested in who commented on my post not with his email id
           but if still we want to make functionality of the app that email show also diplay in content then
           we can show in content of email using html-email-template.
@@ -207,6 +207,9 @@ explanation:
  > 1,2  As we took comment object id and post object id to populate each data inside these 2 objects
  > 3,4  populates comments and post user from below we can see inside comments object user is present
         but post object is not expanded but its in real expanded but its only showing comment object
+        Note - if we are seeing comments object then we can see expanded user of comment
+        but form line 4 we are also expanding the post object but we can not see this expanded post object
+        so to see the expanded post object we need to write seperate  --> console.log(postUser)
  > 5,6  we are taking comments user and post user in 2 variables
  > 7    calling commentsMailer then process of mail start from comments_mailer.js
 
