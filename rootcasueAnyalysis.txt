@@ -1,0 +1,260 @@
+Errors and Solutions
+1. notification [object Object] error is coming so how we fixed 
+
+steps-> 
+1. converted older version to newer version
+  (older)
+ let comment = new comment({
+        content: req.body.content, 
+        post: req.body.post,
+        user : req.user._id 
+        });  
+(Newer)
+ let comment = await Comment.create({
+        content: req.body.content,
+        // here on each comment we are adding post._id as Comment Schema says
+        post: req.body.post,
+        user: req.user._id,
+      });   
+
+2. replaced const keyword to let bcs post is changing on every new post  and due to this mail work 
+while commenting on a post
+
+
+2. While posting a new post username is undefined on UI.
+steps->
+problem was whenever we were creating a new post using AJAX we were not poulating data inside
+of user's object.
+
+1. module.exports.create = async function(req, res){
+    try {
+
+     let post = await Post.create({
+        content: req.body.content,
+        user : req.user._id });   
+    
+      if(post){
+        // we are not populating user's data here 
+        console.log("Post Object: ", post);
+       
+      
+        if(req.xhr){
+          return res.status(200).json({
+            data :{
+              post: post;
+            },
+            message: "Post created!"
+          })
+        }
+
+        req.flash('success', "Post is created successfully!!");
+        return res.redirect('back'); //or '/',  back to the home page
+      } 
+    }
+    
+    catch(err) {
+        req.flash('error', "Error while making a post");
+        return res.redirect('back');
+    }
+}
+
+// this is post object in console see this carefully 
+// we have content, user, comments array
+Post Object:  {
+  content: 'post 10',
+  user: new ObjectId("652ed3948464ade152da8256"),
+  comments: [],
+  _id: new ObjectId("65339ddc3b8778c3128315af"),
+  createdAt: 2023-10-21T09:46:04.926Z,
+  updatedAt: 2023-10-21T09:46:04.926Z,
+  __v: 0
+}
+
+So while showing user name in UI from _post.ejs 
+post.user.name we were getting undefined
+
+
+2. solution populate the user while making new post (line no. 86)
+
+module.exports.create = async function(req, res){
+    try {
+
+     let post = await Post.create({
+        content: req.body.content,
+        user : req.user._id }); 
+
+    // we are not populating user's data here 
+     post = await post.populate('user');    
+      if(post){
+        
+        console.log("Post Object: ", post);
+       
+      
+        if(req.xhr){
+          return res.status(200).json({
+            data :{
+              post: post;
+            },
+            message: "Post created!"
+          })
+        }
+
+        req.flash('success', "Post is created successfully!!");
+        return res.redirect('back'); //or '/',  back to the home page
+      } 
+    }
+    
+    catch(err) {
+        req.flash('error', "Error while making a post");
+        return res.redirect('back');
+    }
+}
+
+
+and if we will show post.user.name it will show user name on UI.
+
+Post Object:  {
+  content: 'post 5',
+  user: {
+    _id: new ObjectId("652ed3948464ade152da8256"),
+    email: 'deepakjaiswar12098@gmail.com',
+    password: 'c441e20667a928bcc80659c047b82e415962fd58',
+    name: 'Deepak Jaiswar',                     <------   we want to display this name
+    createdAt: 2023-10-17T18:33:56.541Z,
+    updatedAt: 2023-10-17T18:33:56.541Z,
+    __v: 0
+  }
+}
+
+
+
+3.
+Whatever code we can see in console in developer tools that code or in source
+that is cleint side code.
+eg. home_post.js or inside JS folder every file is client side code
+
+and Whatever code we can not see in console in developer tools that code or in source
+that is Server  side code.
+eg. controllers, and ejs files
+
+
+
+
+
+
+---------------------------------------------
+
+problem: facing from 5-8 days mailers concept
+problem description:  if manohar wants to comments on deepak post then mail from codeial should go to deepak
+                      that "hey deepak manohar has commented on your post" 
+technically: the mail from codeial to deepak need to be sent and data of manohar should come in email template
+
+Understanding : as in From: codeial.com(domain name)  as we dont have domain name so we will use any mail _id
+                example: deepakjaiswar12098@gmail.com will work as domain name and authentication require  
+                and in To : deepakjaiswar120@gmail.com
+
+                so the codeial will send mail to deepak 
+
+                From: deepakjaiswar12098@gmail.com
+                To   : deepakjaiswar120@gmail.com  
+
+via html email template  "hey deepak manohar has commented on your post"   <--  content
+
+as above content is sent from the codeial to deepak when manohar has commented with his email _id
+               jaiswarmanohar3@gmail.com     <-- comments.user.email
+
+ and we will not show the manohar email id to deepak 
+
+ concept: why because codeial will show to deepak hey manohar commented on your post 
+          id you want to show manohar detail to deepak then we can show from db of codeial 
+          but its not need.
+          because deepak is only intrested in who commented on my post not with his email id
+          but if still we want to make functionality of the app that email show also diplay in content then
+          we can show in content of email using html-email-template.
+
+how we solve this:
+1. code comments_controllers.js
+
+let comment = await Comment.create({
+        content: req.body.content,
+        // here on each comment we are adding post._id as Comment Schema says
+        post: req.body.post,  // this is post is name attribute of _post.ejs (post._id)
+        user: req.user._id,
+      });
+
+        // here on each post we are adding array of comments as Post Schema says ()
+        // post we are fetching from db , comments is coming from post schema and push is func
+        // comment coming from line no. 22
+        post.comments.push(comment); 
+        post.save();
+    1.    let commentId = comment._id; //coming in object form eg. new ObjectId("653585bdaffdfff5e277b0a1")
+    2.    let postId = post._id;
+    
+        // Use the newer async/await syntax to populate the user fields in both Comment and Post
+  3.      comment = await comment.populate('user'); // expanding user object only in comment object
+  4.      post = await post.populate('user');
+  5.     let commentUser = comment.user; // jaiswarmanohar3@gmail.com (comment done by this user)
+  6.      let postUser = post.user; // deepakjaiswar120@gmail.com (post done by this user)
+
+        // whenever a new comment is going to make after that an email should send
+        console.log("inside comment controller ", comment);
+  7.     commentsMailer.newComment(commentUser,postUser);
+
+
+explanation:  
+        
+
+ > 1,2  As we took comment object id and post object id to populate each data inside these 2 objects
+ > 3,4  populates comments and post user from below we can see inside comments object user is present
+        but post object is not expanded but its in real expanded but its only showing comment object
+ > 5,6  we are taking comments user and post user in 2 variables
+ > 7    calling commentsMailer then process of mail start from comments_mailer.js
+
+ code:  comments_mailer.js 
+
+                  module.exports.newComment = (commentUser, postUser) => {
+            console.log("Inside newComment mailer", comment);
+
+            nodeMailer.transporter.sendMail({
+                    from: 'deepakjaiswar12098@gmail.com',
+    1.                to: postUser.email, // jo bhi coment karega on any post
+                    subject: 'New Comment Published!',
+                    html: "<h1>Yup, your comment is now published!</h1>"
+                } , (err, info) => {
+                    if(err){
+                    console.error("Error in sending mail", err);
+                    return;
+                    }
+                    console.log("Mail sent", info);
+                    return;
+                });
+
+            
+        };        
+
+in 1.  we can see postUser.email  who posted the post we are getting that person email id 
+
+
+
+expanding user object only in comment object
+
+
+
+
+ {
+  content: 'oooo',
+  user: {
+    _id: new ObjectId("65250d53aa8957f98452692f"),
+    email: 'jaiswarmanohar3@gmail.com',
+    password: '92b89905f17bf5a8ff495f5ffa03b33a480b15bc',
+    name: 'Manohar jaiswar',
+    createdAt: 2023-10-10T08:37:39.479Z,
+    updatedAt: 2023-10-10T08:37:39.479Z,
+    __v: 0
+  },
+  post: new ObjectId("65357c3547a350c8fc43ab46"),
+  _id: new ObjectId("653585bdaffdfff5e277b0a1"),
+  createdAt: 2023-10-22T20:27:41.867Z,
+  updatedAt: 2023-10-22T20:27:41.867Z,
+  __v: 0
+}

@@ -10,7 +10,6 @@
         newPostForm.submit(function(e){
             e.preventDefault();
 
-
             // manually submit the form asynchronously 
             $.ajax({
                 type:'POST',
@@ -20,7 +19,8 @@
                 //if req successfull then 
                 success: function(data){
                    console.log("Data:", data);  //JSON data 
-                   let newPost = newPostDom(data.data.post); // now post is created 
+                   let newPost = newPostDom(data.data.post); // now post is created (post is key from 
+                   // line no. 26 post controller.js) 
                    new Noty({
                     theme: 'relax',
                     text: "Post Created",
@@ -31,7 +31,7 @@
                    // we need to add each post on div of "post-list-container" to <ul> tag and then looping 
                    //over multiple posts
                    // prepend jquery fn means adding a newly post  to top in the post-list-container
-                   $('#posts-list-container >ul').prepend(newPost);
+                   $('#posts-list-container>ul').prepend(newPost);
                    deletePost($(' .delete-post-button', newPost)); //
                   // new PostComments(data.data.post._id);
                 },  
@@ -65,7 +65,7 @@
             <!-- showing commment form-->
             <div class="post-comments">
                
-                    <form action="/comments/create" method="POST">
+                    <form action="/comments/create" method="POST" id = "new-comment-form">
                         <input type="text" name="content" placeholder="type here to add comment..." id="type-comment" required>
                         <input type="hidden" name="post"  value=" ${post._id }" >
                         <input type="submit" value="Add Comment" id="add-comment">
@@ -92,7 +92,7 @@
                     url: $(deleteLink).prop('href'),
                     success: function(data){
                         console.log("Post Id:", data.data);
-                        $(`#post-${data.data.post_id}`).remove();
+                        $(`#post-${data.data.post_id}`).remove();  // post_id is coming from controller
                         new Noty({
                             theme: 'relax',
                             text: "Post deleted",

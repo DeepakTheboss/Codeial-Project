@@ -4,7 +4,9 @@ const commentsMailer = require('../mailers/comments_mailer');
 
 module.exports.create = async function (req, res) {
   try {
-    let post = await Post.findById(req.body.post); // where post is name attribute of form
+    let post = await Post.findById(req.body.post); // where post is name attribute of comments form 
+    // coming from _post.ejs
+    
 
     if (post) {
       // if post found then we are making a new comment on post
@@ -20,22 +22,27 @@ module.exports.create = async function (req, res) {
       let comment = await Comment.create({
         content: req.body.content,
         // here on each comment we are adding post._id as Comment Schema says
-        post: req.body.post,
+        post: req.body.post,  // this is post is name attribute of _post.ejs (post._id)
         user: req.user._id,
       });
 
-        console.log("inside comment controller ", comment);
         // here on each post we are adding array of comments as Post Schema says ()
         // post we are fetching from db , comments is coming from post schema and push is func
-        // comment coming from line no. 17
-        post.comments.push(comment);
-        //await 
+        // comment coming from line no. 22
+        post.comments.push(comment); 
         post.save();
+        let commentId = comment._id; //coming in object form eg. new ObjectId("653585bdaffdfff5e277b0a1")
+        let postId = post._id;
+    
+        // Use the newer async/await syntax to populate the user fields in both Comment and Post
+        comment = await comment.populate('user'); // expanding user object only in comment object
+        post = await post.populate('user');
+        let commentUser = comment.user; // jaiswarmanohar3@gmail.com (comment done by this user)
+        let postUser = post.user; // deepakjaiswar120@gmail.com (post done by this user)
 
-        // poulating user on every time need bcs of line no.(12) in comments_nodemailer.js
-        comment = await comment.populate('user', 'name email');
         // whenever a new comment is going to make after that an email should send
-        commentsMailer.newComment(comment);
+        console.log("inside comment controller ", comment);
+        commentsMailer.newComment(commentUser,postUser);
         if(req.xhr){
           return res.status(200).json({
             data :{

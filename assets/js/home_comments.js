@@ -9,9 +9,6 @@
 
         newCommentForm.submit(function(e){
             e.preventDefault();
-
-
-
             // manually submit the form asynchronously 
             $.ajax({
                 type:'POST',

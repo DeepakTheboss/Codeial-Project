@@ -27,7 +27,7 @@ const cusMware = require('./config/middleware');
 app.use(sassMiddleware({
   src: './assets/scss',
   dest: './assets/css',
-  debug: true,
+  debug: false,
   outputStyle: 'extended',
   prefix: '/css'
 
@@ -64,7 +64,7 @@ app.use(
     saveUninitialized: false,
     resave: false,
     cookie: {
-      maxAge: 1000 * 60 * 5, // Expiration time in milliseconds (5 mins)
+      maxAge: 1000 * 60 * 10, // Expiration time in milliseconds (5 mins)
     },
     // Mongo store is used to store the cookie in the database
     

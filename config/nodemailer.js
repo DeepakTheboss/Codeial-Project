@@ -47,22 +47,6 @@ let renderTemplate = (data, relativePath) => {
 
 }
 
-
-// const renderTemplate = async (data, relativePath) => {
-//     try {
-//         // template varibale is combination of path + data
-//         const template = await ejs.renderFile(
-//             path.join(__dirname, '../view/mailers', relativePath),
-//             data // data is like in predefined template we are filling some variables name like name of user, etc.
-           
-//         );
-//         return template;
-//     } catch (err) {
-//         console.error('Error in rendering template:', err);
-//         return ''; // Return an empty string or handle the error as needed.
-//     }
-// };
-
 module.exports = {
     transporter: transporter,
     renderTemplate:renderTemplate
