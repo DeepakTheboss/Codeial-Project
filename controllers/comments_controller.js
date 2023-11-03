@@ -1,6 +1,8 @@
 const Post = require("../models/post"); // Import your Post model here
 const Comment = require("../models/comment"); // Import your Comment model here
 const commentsMailer = require('../mailers/comments_mailer');
+const queue = require('../config/kue');
+const commentEmailWorker = require('../workers/comment_email_worker');   // this will send the email hence importing here
 
 module.exports.create = async function (req, res) {
   try {
@@ -40,9 +42,21 @@ module.exports.create = async function (req, res) {
         let commentUser = comment.user; // jaiswarmanohar3@gmail.com (comment done by this user)
         let postUser = post.user; // deepakjaiswar120@gmail.com (post done by this user)
 
+        
+
         // whenever a new comment is going to make after that an email should send
         console.log("inside comment controller ", comment);
-        commentsMailer.newComment(comment,commentUser,postUser);
+        //commentsMailer.newComment(comment,commentUser,postUser);
+        
+        // here we are sending all comment comentUser and post as a single object to worker 
+        let emailjob = queue.create('emails', {comment,commentUser,postUser}).save(function(err){
+          if (err){
+              console.log('error in sending to the queue', err);
+              return;
+          }
+          console.log('job enqueued',emailjob.id);
+        });
+
         if(req.xhr){
           return res.status(200).json({
             data :{

@@ -1,0 +1,42 @@
+ Forgot Password Or Reset password using email
+
+
+
+1. **User Requests Password Reset:**
+   - User clicks a "Reset Password" link and provides their email address.
+
+2. **Generate Reset Password Token:**
+   - The server generates a unique access token (e.g., using a cryptographic library or a token generator).
+   - Create a `reset_password_token` document in your database (e.g., MongoDB) with the following fields:
+     - `token` (the unique access token)
+     - `user` (a reference to the user schema/document)
+     - `isValid` (set to `true`)
+     - `timestamp` (the time of token creation)
+     - Optionally, you can add an expiration time to make the token valid only for a specific duration.
+
+3. **Send Email with Reset Link:**
+   - Send an email to the user's provided email address containing a link like `reset_password/?accesstoken=abcd123`.
+   - The email should instruct the user to click the link to reset their password.
+
+4. **User Clicks Reset Link:**
+   - When the user clicks the link, they are directed to a web page where they can reset their password.
+
+5. **Password Reset Form:**
+   - On the reset password form, the user enters their new password and confirms it.
+
+6. **Form Submission:**
+   - When the user submits the form, the server:
+     - Checks that the access token in the URL is valid and hasn't expired.
+     - Verifies that the password and confirm password fields match.
+     - If everything is valid, change the user's password by updating the user schema.
+     - Set `isValid` to `false` for the reset_password_token document to prevent multiple uses of the same token.
+
+7. **Password Reset Confirmation:**
+   - Inform the user that their password has been successfully reset.
+
+8. **Error Handling:**
+   - Handle cases where the token is invalid, expired, or the password confirmation doesn't match.
+
+To ensure the security of this process, consider using best practices for token generation and validation. Also, make sure your server handles errors gracefully and securely. Additionally, you can add features like rate limiting and account lockout mechanisms to enhance security.
+
+The specific implementation details will depend on your web application framework and database. If you have code snippets or specific questions about any part of this process or the technology you're using, please feel free to ask, and I can provide more detailed guidance.

@@ -19,6 +19,7 @@ router.use('/posts', require('./posts'));
 router.use('/comments', require('./comments'));
 // this is sub routes
 router.use('/api', require('./api'));
+router.use('/auth', require('./auth'));
 
 module.exports = router;
 
