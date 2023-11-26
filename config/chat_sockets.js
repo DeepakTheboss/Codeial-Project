@@ -39,7 +39,14 @@ module.exports.chatSockets =(socketServer)=>{
 
         })
 
+        // detect send_message and broadcast to everyone in the room
+       socket.on('send_message', function(data){
+        io.in(data.chatroom).emit('recieve_message', data);
+       })
+
     });
+
+    
      
 }
 
