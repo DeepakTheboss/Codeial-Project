@@ -1,4 +1,6 @@
 const express = require('express');
+const cors = require('cors');
+const io = require('socket.io-client');
 const expressLayouts = require('express-ejs-layouts');
 const db = require('./config/mongoose');
 const User = require('./models/user');
@@ -22,6 +24,16 @@ const sassMiddleware = require('node-sass-middleware');
 const flash = require('connect-flash');
 const cusMware = require('./config/middleware');
 
+ // setup the chat server to be used with socket.io
+  // we are importing the http(inbuilt module) for express app
+  // put on different port than 8000
+  
+ const chatServer = require('http').createServer(app); 
+ const chatSockets = require('./config/chat_sockets').chatSockets(chatServer);
+ chatServer.listen(5000);
+ console.log('chat server is listning on port 5000');
+
+
 // puted  this middleware to at the starting, before server gets started bcs it will precompiled 
 //and availble to all the views
 app.use(sassMiddleware({
@@ -40,7 +52,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 // Middleware for serving static files
-app.use(express.static('./assets'));
+app.use(express.static('assets'));
 
 // make the upload path available to browser
 app.use('/uploads', express.static(__dirname + '/uploads'));
@@ -64,7 +76,7 @@ app.use(
     saveUninitialized: false,
     resave: false,
     cookie: {
-      maxAge: 1000 * 60 * 10, // Expiration time in milliseconds (5 mins)
+      maxAge: 1000 * 60 * 20, // Expiration time in milliseconds (20 mins)
     },
     // Mongo store is used to store the cookie in the database
     
@@ -104,7 +116,7 @@ app.use('/', require('./routes')); // It will pick the default
 //index.js route (inside the routes folder i.e., index.js)
 
 // Server listening
-app.listen(port, function (err) {
+app.listen(port, function (err) {  
   if (err) {
     console.log(`Error in running the server ${err}`);
     return;

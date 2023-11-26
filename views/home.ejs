@@ -25,8 +25,8 @@
 
       </section>
 
-      <section id = "user-friends">
-            <h3>Friends List</h3>
+      <section id = "user-lists">
+            <h3>List of Users</h3>
             <!-- listing all users  only when current user is logged in-->
             <% if(locals.user) { %> 
             <% for(u of all_users) {  %>
@@ -37,12 +37,36 @@
             <% } %>
 
       </section>
+       <hr>
+       <hr>
+       <section id = "user-friends">
+        <h3>Friend Lists</h3>
+       
+
+        </section>
+
+        <%-include('_chat_box') -%>
+        
 
 </div>
-<script type="text/javascript" src = "/js/home_posts.js"></script>
-<script  type="text/javascript" src = "/js/home_comments.js"></script>
 
+<!-- importing this script for creating the comments -->
+<script src="/js/home_post_comments.js" ></script>
+<script src="/js/home_posts.js"></script>
 
-
-
-     
+<!-- CHANGE :: import the script file for toggle likes, also run it over for the already present posts and comments on the page -->
+<script src="js/toggle_likes.js"></script>
+<script>
+    $('.toggle-like-button').each(function(){
+        let self = this;
+        let toggleLike = new ToggleLike(self);
+    });
+</script>
+<script src="js/toggle_friends.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.js"></script>
+<script src="/js/chat_engine.js"></script>
+<% if(locals.user){ %>
+   <script>
+      new ChatEngine('user-chat-box', '<%= locals.user._id %>')
+   </script>
+   <% } %>
