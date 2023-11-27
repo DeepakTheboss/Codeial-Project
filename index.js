@@ -1,4 +1,5 @@
 const express = require('express');
+const env = require('./config/environment');
 const cors = require('cors');
 const io = require('socket.io-client');
 const expressLayouts = require('express-ejs-layouts');
@@ -23,6 +24,7 @@ const sassMiddleware = require('node-sass-middleware');
 // used bcs showing flash messages to UI
 const flash = require('connect-flash');
 const cusMware = require('./config/middleware');
+const path = require('path');
 
  // setup the chat server to be used with socket.io
   // we are importing the http(inbuilt module) for express app
@@ -37,8 +39,8 @@ const cusMware = require('./config/middleware');
 // puted  this middleware to at the starting, before server gets started bcs it will precompiled 
 //and availble to all the views
 app.use(sassMiddleware({
-  src: './assets/scss',
-  dest: './assets/css',
+  src: path.join(__dirname, env.asset_path, '/scss'), // we can put '/scss' or 'scss' works same
+  dest: path.join(__dirname, env.asset_path, '/css'),
   debug: false,
   outputStyle: 'extended',
   prefix: '/css'
@@ -52,10 +54,10 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 // Middleware for serving static files
-app.use(express.static('assets'));
+app.use(express.static(env.asset_path));
 
 // make the upload path available to browser
-app.use('/uploads', express.static(__dirname + '/uploads'));
+app.use(env.upload_path, express.static(__dirname + env.upload_path));
 // Extract style and scripts from sub pages (views e.g., userProfiles.ejs, etc.)
 app.set('layout extractStyles', true);
 app.set('layout extractScripts', true);
@@ -66,13 +68,13 @@ app.use(expressLayouts);
 
 // Setting the view engine to show everything on UI
 app.set('view engine', 'ejs');
-app.set('views', './views');
+app.set('views', env.view_path);
 
 // Session configuration
 app.use(
   session({
-    name: 'Codeial', // Name of the cookie
-    secret: 'your-secret-key', // Use a strong and unique secret key
+    name: env.session_name, // Name of the cookie
+    secret: env.session_cookie_key, // Use a strong and unique secret key
     saveUninitialized: false,
     resave: false,
     cookie: {
@@ -84,7 +86,7 @@ app.use(
       {
        // mongooseConnection: db,
         // this is newer versions 
-        mongoUrl: 'mongodb://127.0.0.1/codeial_development',
+        mongoUrl: `mongodb://127.0.0.1/${env.db}`,
         autoRemove: 'disabled',
       },
       function (err) {
@@ -112,7 +114,7 @@ app.use(cusMware.setFlash);
 app.use(passport.setAuthenticatedUser);
 
 // Use express router
-app.use('/', require('./routes')); // It will pick the default 
+app.use('/', require(env.route_path)); // It will pick the default 
 //index.js route (inside the routes folder i.e., index.js)
 
 // Server listening

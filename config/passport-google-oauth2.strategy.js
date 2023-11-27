@@ -2,16 +2,17 @@ const passport = require('passport');
 const googleStrategy = require('passport-google-oauth').OAuth2Strategy;
 const crypto = require('crypto');
 const User = require('../models/user');
+const env = require('./environment');
 
 
 // tell passport to use new strategy for google login
 passport.use(new googleStrategy(
     // called options available in oauth provided by google
     {
-    clientID:"897686259244-qvi5jovgifpakl7icte15dsff9df99p6.apps.googleusercontent.com",
-    clientSecret: "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",
-    callbackURL: "http://localhost:8000/users/auth/google/callback",
-    passReqToCallback: true // then "req" will be 1st argument in async function
+    clientID:env.google_client_ID,
+    clientSecret: env.google_client_Secret,
+    callbackURL: env.google_call_back_URL,
+    passReqToCallback: env.google_passReqToCallback // then "req" will be 1st argument in async function
    },
 
    // 1. As we generate JWT token called as accessToken for authentiating other requests
