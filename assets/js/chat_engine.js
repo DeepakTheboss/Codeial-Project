@@ -1,7 +1,8 @@
 class ChatEngine{
-    constructor(chatBoxId, userEmail){
+    constructor(chatBoxId, userEmail, name){
         this.chatBox = $(`#${chatBoxId}`);
         this.userEmail = userEmail;
+        this.name = name;
 
         //chat_engine.js or we will emit an connect event then chat_sockets.js will recive a connection.
         // and this(backend) emits back(acknolwdeged) that u are connected using connect event 
@@ -46,6 +47,7 @@ class ChatEngine{
                 self.socket.emit('send_message', {
                     message: msg,
                     user_email: self.userEmail,
+                    name: self.name,
                     chatroom: 'codeial'
                 });
             }
